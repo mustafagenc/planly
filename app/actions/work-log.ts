@@ -70,6 +70,26 @@ export async function createWorkLog(data: {
   return log;
 }
 
+export async function updateWorkLog(
+  id: number,
+  data: Partial<{
+    date: Date;
+    daysWorked: number;
+    description: string;
+  }>
+) {
+  const log = await prisma.workLog.update({
+    where: { id },
+    data,
+  });
+
+  // Note: We are not auto-adjusting parent task daysSpent on update to avoid complexity
+  // and potential double-counting/drift. Users can manually adjust task totals if needed.
+
+  revalidatePath('/');
+  return log;
+}
+
 export async function deleteWorkLog(id: number) {
   // When deleting, we should probably decrease the spent time, but that's complex without transaction.
   // For MVP, just delete.

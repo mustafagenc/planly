@@ -14,6 +14,8 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { WorkLogDialog } from './work-log-dialog';
 import { CreateAnnualPlanDialog } from './create-annual-plan-dialog';
+import { EditAnnualPlanDialog } from './edit-annual-plan-dialog';
+import { Pencil } from 'lucide-react';
 
 interface AnnualPlansListProps {
     plans: (AnnualPlan & {
@@ -78,8 +80,18 @@ export function AnnualPlansList({ plans, projects, units, people }: AnnualPlansL
                             </div>
 
                             <div className="flex items-center justify-between">
-                                {/* Empty div for spacing if needed, or other actions */}
-                                <div></div>
+                                {/* Edit and other actions */}
+                                <div className="flex gap-1">
+                                    <EditAnnualPlanDialog
+                                        plan={plan}
+                                        people={people}
+                                        trigger={
+                                            <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground">
+                                                <Pencil className="h-3 w-3" />
+                                            </Button>
+                                        }
+                                    />
+                                </div>
                                 <WorkLogDialog
                                     title={plan.taskSummary}
                                     annualPlanId={plan.id}

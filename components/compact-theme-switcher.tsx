@@ -22,6 +22,7 @@ export function CompactThemeSwitcher(props: CompactThemeSwitcherProps) {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         setMounted(true);
     }, []);
 
@@ -56,8 +57,8 @@ export function CompactThemeSwitcher(props: CompactThemeSwitcherProps) {
                                 value={value}
                                 aria-label={`Switch to ${label} theme`}
                                 className={`data-[state=on]:ring-primary/20 h-6 w-6 cursor-pointer p-0 transition-all duration-300 hover:scale-105 data-[state=on]:scale-105 data-[state=on]:ring-2 ${theme === value
-                                        ? 'bg-primary/10 text-primary'
-                                        : 'hover:bg-accent/30 opacity-60 hover:opacity-100'
+                                    ? 'bg-primary/10 text-primary'
+                                    : 'hover:bg-accent/30 opacity-60 hover:opacity-100'
                                     } `}
                             >
                                 <Icon size={12} className={theme === value ? 'text-primary' : 'opacity-70'} />

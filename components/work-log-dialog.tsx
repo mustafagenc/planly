@@ -14,9 +14,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createWorkLog } from '@/app/actions/work-log';
-import { Loader2, Calendar as CalendarIcon } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
 
 interface WorkLogDialogProps {
     trigger?: React.ReactNode;

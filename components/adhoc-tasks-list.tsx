@@ -10,6 +10,8 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { WorkLogDialog } from './work-log-dialog';
 import { CreateAdHocTaskDialog } from './create-adhoc-task-dialog';
+import { EditAdHocTaskDialog } from './edit-adhoc-task-dialog';
+import { Pencil } from 'lucide-react';
 
 interface AdHocTasksListProps {
     tasks: (AdHocTask & {
@@ -64,15 +66,26 @@ export function AdHocTasksList({ tasks, projects, people }: AdHocTasksListProps)
                                             Not: {task.remarks}
                                         </p>
                                     )}
-                                    <WorkLogDialog
-                                        title={task.description}
-                                        adHocTaskId={task.id}
-                                        trigger={
-                                            <Button variant="ghost" size="sm" className="h-6 text-xs px-2">
-                                                <Clock className="mr-1 h-3 w-3" /> Efor Gir
-                                            </Button>
-                                        }
-                                    />
+                                    <div className="flex items-center gap-1">
+                                        <EditAdHocTaskDialog
+                                            task={task}
+                                            people={people}
+                                            trigger={
+                                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground">
+                                                    <Pencil className="h-3 w-3" />
+                                                </Button>
+                                            }
+                                        />
+                                        <WorkLogDialog
+                                            title={task.description}
+                                            adHocTaskId={task.id}
+                                            trigger={
+                                                <Button variant="ghost" size="sm" className="h-6 text-xs px-2">
+                                                    <Clock className="mr-1 h-3 w-3" /> Efor Gir
+                                                </Button>
+                                            }
+                                        />
+                                    </div>
                                 </div>
                             </div>
 

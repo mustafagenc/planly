@@ -15,7 +15,7 @@ export async function getPeople() {
   return await prisma.person.findMany();
 }
 
-export async function getAnnualPlans(year: number = 2025) {
+export async function getAnnualPlans(year: number = new Date().getFullYear()) {
   return await prisma.annualPlan.findMany({
     where: { year },
     include: {

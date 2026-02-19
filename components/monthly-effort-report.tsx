@@ -12,8 +12,9 @@ import {
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
-import { Loader2, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
+import { Loader2, ChevronLeft, ChevronRight, Pencil } from 'lucide-react';
 import { WorkLog, AnnualPlan, Project, AdHocTask } from '@/prisma/generated/client';
+import { EditWorkLogDialog } from './edit-work-log-dialog';
 
 export function MonthlyEffortReport() {
     const [date, setDate] = useState(new Date());
@@ -138,15 +139,20 @@ export function MonthlyEffortReport() {
                                                 <div className="font-medium text-sm">
                                                     {log.daysWorked} Gün
                                                 </div>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon-sm"
-                                                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                                                    onClick={() => handleDelete(log.id)}
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                    <span className="sr-only">Sil</span>
-                                                </Button>
+                                                <EditWorkLogDialog
+                                                    log={log}
+                                                    onUpdate={() => fetchLogs()}
+                                                    trigger={
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon-sm"
+                                                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                                                        >
+                                                            <Pencil className="h-4 w-4" />
+                                                            <span className="sr-only">Düzenle</span>
+                                                        </Button>
+                                                    }
+                                                />
                                             </div>
                                         </div>
                                     ))}

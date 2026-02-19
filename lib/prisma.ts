@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { PrismaClient } from '@/prisma/generated/client';
+import { PrismaClient } from '../prisma/generated/client';
 
 declare global {
   var prisma: undefined | PrismaClient;
