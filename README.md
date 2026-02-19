@@ -13,6 +13,16 @@ Kişisel iş planlama ve takip uygulaması. Yıllık iş planı, plan harici iş
 
 </div>
 
+## Ekran Görüntüleri
+
+| Raporlar | İş Listesi |
+|---|---|
+| ![Raporlar](/public/screenshots/home.png) | ![Kanban Board](/public/screenshots/kanban.png) |
+
+| Kanban Board | Tanımlamalar |
+|---|---|
+| ![İş Listesi](/public/screenshots/tasks.png) | ![Tanımlamalar](/public/screenshots/definitions.png) |
+
 ## Teknolojiler
 
 | Katman           | Teknoloji                                        |
