@@ -111,7 +111,7 @@ export function PlanlyLogo({
 								letterSpacing: '0.05em',
 							}}
 						>
-							İş Planlama & Takip
+							Kişisel iş planlama ve takip uygulaması
 						</span>
 					)}
 				</div>
