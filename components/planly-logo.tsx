@@ -28,69 +28,21 @@ export function PlanlyLogo({
 			>
 				{/* Background Circle with Gradient */}
 				<defs>
-					<linearGradient
-						id='planlyGradient'
-						x1='0%'
-						y1='0%'
-						x2='100%'
-						y2='100%'
-					>
-						<stop
-							offset='0%'
-							style={{ stopColor: '#3b82f6', stopOpacity: 1 }}
-						/>
-						<stop
-							offset='100%'
-							style={{ stopColor: '#1d4ed8', stopOpacity: 1 }}
-						/>
+					<linearGradient id='planlyGradient' x1='0%' y1='0%' x2='100%' y2='100%'>
+						<stop offset='0%' style={{ stopColor: '#3b82f6', stopOpacity: 1 }} />
+						<stop offset='100%' style={{ stopColor: '#1d4ed8', stopOpacity: 1 }} />
 					</linearGradient>
-					<linearGradient
-						id='accentGradient'
-						x1='0%'
-						y1='0%'
-						x2='100%'
-						y2='100%'
-					>
-						<stop
-							offset='0%'
-							style={{ stopColor: '#10b981', stopOpacity: 1 }}
-						/>
-						<stop
-							offset='100%'
-							style={{ stopColor: '#059669', stopOpacity: 1 }}
-						/>
+					<linearGradient id='accentGradient' x1='0%' y1='0%' x2='100%' y2='100%'>
+						<stop offset='0%' style={{ stopColor: '#10b981', stopOpacity: 1 }} />
+						<stop offset='100%' style={{ stopColor: '#059669', stopOpacity: 1 }} />
 					</linearGradient>
-					<linearGradient
-						id='warningGradient'
-						x1='0%'
-						y1='0%'
-						x2='100%'
-						y2='100%'
-					>
-						<stop
-							offset='0%'
-							style={{ stopColor: '#f59e0b', stopOpacity: 1 }}
-						/>
-						<stop
-							offset='100%'
-							style={{ stopColor: '#d97706', stopOpacity: 1 }}
-						/>
+					<linearGradient id='warningGradient' x1='0%' y1='0%' x2='100%' y2='100%'>
+						<stop offset='0%' style={{ stopColor: '#f59e0b', stopOpacity: 1 }} />
+						<stop offset='100%' style={{ stopColor: '#d97706', stopOpacity: 1 }} />
 					</linearGradient>
-					<linearGradient
-						id='dangerGradient'
-						x1='0%'
-						y1='0%'
-						x2='100%'
-						y2='100%'
-					>
-						<stop
-							offset='0%'
-							style={{ stopColor: '#ef4444', stopOpacity: 1 }}
-						/>
-						<stop
-							offset='100%'
-							style={{ stopColor: '#dc2626', stopOpacity: 1 }}
-						/>
+					<linearGradient id='dangerGradient' x1='0%' y1='0%' x2='100%' y2='100%'>
+						<stop offset='0%' style={{ stopColor: '#ef4444', stopOpacity: 1 }} />
+						<stop offset='100%' style={{ stopColor: '#dc2626', stopOpacity: 1 }} />
 					</linearGradient>
 				</defs>
 
@@ -98,25 +50,10 @@ export function PlanlyLogo({
 				<circle cx='50' cy='50' r='45' fill='url(#planlyGradient)' />
 
 				{/* Calendar/Grid Icon */}
-				<rect
-					x='25'
-					y='28'
-					width='50'
-					height='44'
-					rx='4'
-					fill='white'
-					fillOpacity='0.95'
-				/>
+				<rect x='25' y='28' width='50' height='44' rx='4' fill='white' fillOpacity='0.95' />
 
 				{/* Calendar Header */}
-				<rect
-					x='25'
-					y='28'
-					width='50'
-					height='10'
-					rx='4'
-					fill='white'
-				/>
+				<rect x='25' y='28' width='50' height='10' rx='4' fill='white' />
 				<rect
 					x='25'
 					y='28'
@@ -127,83 +64,23 @@ export function PlanlyLogo({
 				/>
 
 				{/* Calendar Dots (Days) */}
-				<circle
-					cx='33'
-					cy='46'
-					r='2.5'
-					fill='url(#planlyGradient)'
-					fillOpacity='0.6'
-				/>
+				<circle cx='33' cy='46' r='2.5' fill='url(#planlyGradient)' fillOpacity='0.6' />
 				<circle cx='42' cy='46' r='2.5' fill='url(#accentGradient)' />
-				<circle
-					cx='51'
-					cy='46'
-					r='2.5'
-					fill='url(#planlyGradient)'
-					fillOpacity='0.6'
-				/>
-				<circle
-					cx='60'
-					cy='46'
-					r='2.5'
-					fill='url(#planlyGradient)'
-					fillOpacity='0.6'
-				/>
+				<circle cx='51' cy='46' r='2.5' fill='url(#planlyGradient)' fillOpacity='0.6' />
+				<circle cx='60' cy='46' r='2.5' fill='url(#planlyGradient)' fillOpacity='0.6' />
 				<circle cx='67' cy='46' r='2.5' fill='url(#warningGradient)' />
 
-				<circle
-					cx='33'
-					cy='54'
-					r='2.5'
-					fill='url(#planlyGradient)'
-					fillOpacity='0.6'
-				/>
-				<circle
-					cx='42'
-					cy='54'
-					r='2.5'
-					fill='url(#planlyGradient)'
-					fillOpacity='0.6'
-				/>
+				<circle cx='33' cy='54' r='2.5' fill='url(#planlyGradient)' fillOpacity='0.6' />
+				<circle cx='42' cy='54' r='2.5' fill='url(#planlyGradient)' fillOpacity='0.6' />
 				<circle cx='51' cy='54' r='2.5' fill='url(#accentGradient)' />
-				<circle
-					cx='60'
-					cy='54'
-					r='2.5'
-					fill='url(#planlyGradient)'
-					fillOpacity='0.6'
-				/>
-				<circle
-					cx='67'
-					cy='54'
-					r='2.5'
-					fill='url(#planlyGradient)'
-					fillOpacity='0.6'
-				/>
+				<circle cx='60' cy='54' r='2.5' fill='url(#planlyGradient)' fillOpacity='0.6' />
+				<circle cx='67' cy='54' r='2.5' fill='url(#planlyGradient)' fillOpacity='0.6' />
 
-				<circle
-					cx='33'
-					cy='62'
-					r='2.5'
-					fill='url(#planlyGradient)'
-					fillOpacity='0.6'
-				/>
+				<circle cx='33' cy='62' r='2.5' fill='url(#planlyGradient)' fillOpacity='0.6' />
 				<circle cx='42' cy='62' r='2.5' fill='url(#dangerGradient)' />
-				<circle
-					cx='51'
-					cy='62'
-					r='2.5'
-					fill='url(#planlyGradient)'
-					fillOpacity='0.6'
-				/>
+				<circle cx='51' cy='62' r='2.5' fill='url(#planlyGradient)' fillOpacity='0.6' />
 				<circle cx='60' cy='62' r='2.5' fill='url(#accentGradient)' />
-				<circle
-					cx='67'
-					cy='62'
-					r='2.5'
-					fill='url(#planlyGradient)'
-					fillOpacity='0.6'
-				/>
+				<circle cx='67' cy='62' r='2.5' fill='url(#planlyGradient)' fillOpacity='0.6' />
 			</svg>
 
 			{/* Text Logo */}
@@ -213,8 +90,7 @@ export function PlanlyLogo({
 						className='font-bold tracking-tight'
 						style={{
 							fontSize: `${size * 0.25}px`,
-							background:
-								'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+							background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
 							WebkitBackgroundClip: 'text',
 							WebkitTextFillColor: 'transparent',
 							backgroundClip: 'text',

@@ -11,9 +11,7 @@ export function Footer() {
 					<Link href='https://mustafagenc.info'>Mustafa Genç</Link>
 				</p>
 				<div className='flex items-center gap-3'>
-					<span className='text-xs text-muted-foreground/50 font-mono'>
-						v{version}
-					</span>
+					<span className='text-xs text-muted-foreground/50 font-mono'>v{version}</span>
 					<CompactThemeSwitcher />
 				</div>
 			</div>

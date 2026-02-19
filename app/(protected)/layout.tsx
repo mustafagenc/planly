@@ -3,11 +3,7 @@ import { auth } from '@/app/auth';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 
-export default async function ProtectedLayout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
+export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
 	const session = await auth();
 
 	if (!session) {

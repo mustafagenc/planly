@@ -40,9 +40,7 @@ export default function RootLayout({
 						enableSystem
 						disableTransitionOnChange
 					>
-						<TooltipProvider>
-							{children}
-						</TooltipProvider>
+						<TooltipProvider>{children}</TooltipProvider>
 						<Analytics />
 					</ThemeProvider>
 				</SessionProvider>

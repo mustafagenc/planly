@@ -21,11 +21,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import { createTask } from '@/app/actions/task';
-import {
-	type Project,
-	type Unit,
-	type Person,
-} from '@/prisma/generated/client';
+import { type Project, type Unit, type Person } from '@/prisma/generated/client';
 import { Loader2, Plus } from 'lucide-react';
 
 interface CreateTaskDialogProps {
@@ -48,11 +44,7 @@ const INITIAL_FORM = {
 	remarks: '',
 };
 
-export function CreateTaskDialog({
-	projects,
-	units,
-	people,
-}: CreateTaskDialogProps) {
+export function CreateTaskDialog({ projects, units, people }: CreateTaskDialogProps) {
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [form, setForm] = useState(INITIAL_FORM);
@@ -71,14 +63,10 @@ export function CreateTaskDialog({
 				detail: form.detail || undefined,
 				ticketNo: form.ticketNo || undefined,
 				unitId: form.unitId ? Number(form.unitId) : undefined,
-				responsibleId: form.responsibleId
-					? Number(form.responsibleId)
-					: undefined,
+				responsibleId: form.responsibleId ? Number(form.responsibleId) : undefined,
 				coResponsible: form.coResponsible || undefined,
 				year: isAnnual ? Number(form.year) : undefined,
-				estimatedDays: form.estimatedDays
-					? Number(form.estimatedDays)
-					: undefined,
+				estimatedDays: form.estimatedDays ? Number(form.estimatedDays) : undefined,
 				remarks: form.remarks || undefined,
 			});
 			setOpen(false);
@@ -91,8 +79,7 @@ export function CreateTaskDialog({
 		}
 	};
 
-	const set = (key: string, value: string) =>
-		setForm((prev) => ({ ...prev, [key]: value }));
+	const set = (key: string, value: string) => setForm((prev) => ({ ...prev, [key]: value }));
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -103,31 +90,20 @@ export function CreateTaskDialog({
 			</DialogTrigger>
 			<DialogContent className='sm:max-w-[520px]'>
 				<DialogHeader>
-					<DialogTitle className='text-lg'>
-						Yeni İş Oluştur
-					</DialogTitle>
-					<DialogDescription>
-						Yeni bir iş kaydı ekleyin.
-					</DialogDescription>
+					<DialogTitle className='text-lg'>Yeni İş Oluştur</DialogTitle>
+					<DialogDescription>Yeni bir iş kaydı ekleyin.</DialogDescription>
 				</DialogHeader>
 				<form onSubmit={handleSubmit} className='space-y-4 py-2'>
 					<div className='grid grid-cols-2 gap-4'>
 						<div className='space-y-2'>
 							<Label>Tip</Label>
-							<Select
-								value={form.type}
-								onValueChange={(v) => set('type', v)}
-							>
+							<Select value={form.type} onValueChange={(v) => set('type', v)}>
 								<SelectTrigger>
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value='ANNUAL_PLAN'>
-										Yıllık İş Planı
-									</SelectItem>
-									<SelectItem value='ADHOC'>
-										Plan Harici
-									</SelectItem>
+									<SelectItem value='ANNUAL_PLAN'>Yıllık İş Planı</SelectItem>
+									<SelectItem value='ADHOC'>Plan Harici</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
@@ -142,10 +118,7 @@ export function CreateTaskDialog({
 								</SelectTrigger>
 								<SelectContent>
 									{projects.map((p) => (
-										<SelectItem
-											key={p.id}
-											value={p.id.toString()}
-										>
+										<SelectItem key={p.id} value={p.id.toString()}>
 											{p.name}
 										</SelectItem>
 									))}
@@ -185,10 +158,7 @@ export function CreateTaskDialog({
 								</SelectTrigger>
 								<SelectContent>
 									{people.map((p) => (
-										<SelectItem
-											key={p.id}
-											value={p.id.toString()}
-										>
+										<SelectItem key={p.id} value={p.id.toString()}>
 											{p.name}
 										</SelectItem>
 									))}
@@ -199,9 +169,7 @@ export function CreateTaskDialog({
 							<Label>Ticket No</Label>
 							<Input
 								value={form.ticketNo}
-								onChange={(e) =>
-									set('ticketNo', e.target.value)
-								}
+								onChange={(e) => set('ticketNo', e.target.value)}
 								placeholder='SDEGEM-123'
 							/>
 						</div>
@@ -214,26 +182,18 @@ export function CreateTaskDialog({
 								<Input
 									type='number'
 									value={form.year}
-									onChange={(e) =>
-										set('year', e.target.value)
-									}
+									onChange={(e) => set('year', e.target.value)}
 								/>
 							</div>
 							<div className='space-y-2'>
 								<Label>Birim</Label>
-								<Select
-									value={form.unitId}
-									onValueChange={(v) => set('unitId', v)}
-								>
+								<Select value={form.unitId} onValueChange={(v) => set('unitId', v)}>
 									<SelectTrigger>
 										<SelectValue placeholder='Seçiniz' />
 									</SelectTrigger>
 									<SelectContent>
 										{units.map((u) => (
-											<SelectItem
-												key={u.id}
-												value={u.id.toString()}
-											>
+											<SelectItem key={u.id} value={u.id.toString()}>
 												{u.name}
 											</SelectItem>
 										))}
@@ -246,9 +206,7 @@ export function CreateTaskDialog({
 									type='number'
 									step='0.5'
 									value={form.estimatedDays}
-									onChange={(e) =>
-										set('estimatedDays', e.target.value)
-									}
+									onChange={(e) => set('estimatedDays', e.target.value)}
 								/>
 							</div>
 						</div>
@@ -260,9 +218,7 @@ export function CreateTaskDialog({
 								<Label>Ortak Çalışma</Label>
 								<Input
 									value={form.coResponsible}
-									onChange={(e) =>
-										set('coResponsible', e.target.value)
-									}
+									onChange={(e) => set('coResponsible', e.target.value)}
 									placeholder='Diğer kişiler'
 								/>
 							</div>
@@ -270,9 +226,7 @@ export function CreateTaskDialog({
 								<Label>Not</Label>
 								<Input
 									value={form.remarks}
-									onChange={(e) =>
-										set('remarks', e.target.value)
-									}
+									onChange={(e) => set('remarks', e.target.value)}
 									placeholder='Ek notlar...'
 								/>
 							</div>
@@ -285,9 +239,7 @@ export function CreateTaskDialog({
 							disabled={loading || !form.projectId || !form.title}
 							size='sm'
 						>
-							{loading && (
-								<Loader2 className='mr-2 h-4 w-4 animate-spin' />
-							)}
+							{loading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
 							Oluştur
 						</Button>
 					</DialogFooter>

@@ -32,9 +32,7 @@ export function UserMenu({ user }: UserMenuProps) {
 					<span className='text-[11px] font-medium text-foreground/80'>
 						{user.name ?? user.email}
 					</span>
-					<span className='text-[9px] text-muted-foreground'>
-						{roleLabel}
-					</span>
+					<span className='text-[9px] text-muted-foreground'>{roleLabel}</span>
 				</div>
 			</div>
 			<Button

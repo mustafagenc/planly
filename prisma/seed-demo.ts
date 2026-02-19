@@ -65,27 +65,69 @@ const UNIT_NAMES = [
 	'Satış',
 ];
 
-const PERSON_NAMES = [
-	'Mustafa Genç',
-	'Ahmet Yılmaz',
-	'Ayşe Kaya',
-	'Mehmet Demir',
-	'Zeynep Çelik',
-];
+const PERSON_NAMES = ['Mustafa Genç', 'Ahmet Yılmaz', 'Ayşe Kaya', 'Mehmet Demir', 'Zeynep Çelik'];
 
 const ANNUAL_PLAN_TASKS = [
-	{ title: 'Ödeme altyapısı yenileme', detail: 'Mevcut ödeme sisteminin mikroservis mimarisine taşınması', estimatedDays: 45 },
-	{ title: 'Kullanıcı yetkilendirme modülü', detail: 'RBAC tabanlı yetkilendirme sistemi geliştirme', estimatedDays: 30 },
-	{ title: 'Performans optimizasyonu', detail: 'Veritabanı sorguları ve API yanıt sürelerinin iyileştirilmesi', estimatedDays: 20 },
-	{ title: 'CI/CD pipeline kurulumu', detail: 'GitHub Actions ile otomatik test ve deploy süreçleri', estimatedDays: 15 },
-	{ title: 'Mobil uygulama v2 geliştirme', detail: 'React Native ile yeni mobil uygulama versiyonu', estimatedDays: 60 },
-	{ title: 'Raporlama dashboard geliştirme', detail: 'Yönetim için gerçek zamanlı raporlama paneli', estimatedDays: 35 },
-	{ title: 'API dokümantasyon sistemi', detail: 'OpenAPI/Swagger entegrasyonu ve otomatik dokümantasyon', estimatedDays: 10 },
-	{ title: 'Müşteri self-servis portal', detail: 'Müşterilerin kendi işlemlerini yapabilecekleri portal', estimatedDays: 40 },
-	{ title: 'Veri göçü projesi', detail: 'Legacy sistemden yeni platforma veri aktarımı', estimatedDays: 25 },
-	{ title: 'Güvenlik denetimi ve iyileştirme', detail: 'Penetrasyon testi ve güvenlik açıklarının giderilmesi', estimatedDays: 20 },
-	{ title: 'E-posta bildirim sistemi', detail: 'Transactional ve marketing e-posta altyapısı', estimatedDays: 15 },
-	{ title: 'Arama motoru entegrasyonu', detail: 'Elasticsearch ile gelişmiş arama özellikleri', estimatedDays: 18 },
+	{
+		title: 'Ödeme altyapısı yenileme',
+		detail: 'Mevcut ödeme sisteminin mikroservis mimarisine taşınması',
+		estimatedDays: 45,
+	},
+	{
+		title: 'Kullanıcı yetkilendirme modülü',
+		detail: 'RBAC tabanlı yetkilendirme sistemi geliştirme',
+		estimatedDays: 30,
+	},
+	{
+		title: 'Performans optimizasyonu',
+		detail: 'Veritabanı sorguları ve API yanıt sürelerinin iyileştirilmesi',
+		estimatedDays: 20,
+	},
+	{
+		title: 'CI/CD pipeline kurulumu',
+		detail: 'GitHub Actions ile otomatik test ve deploy süreçleri',
+		estimatedDays: 15,
+	},
+	{
+		title: 'Mobil uygulama v2 geliştirme',
+		detail: 'React Native ile yeni mobil uygulama versiyonu',
+		estimatedDays: 60,
+	},
+	{
+		title: 'Raporlama dashboard geliştirme',
+		detail: 'Yönetim için gerçek zamanlı raporlama paneli',
+		estimatedDays: 35,
+	},
+	{
+		title: 'API dokümantasyon sistemi',
+		detail: 'OpenAPI/Swagger entegrasyonu ve otomatik dokümantasyon',
+		estimatedDays: 10,
+	},
+	{
+		title: 'Müşteri self-servis portal',
+		detail: 'Müşterilerin kendi işlemlerini yapabilecekleri portal',
+		estimatedDays: 40,
+	},
+	{
+		title: 'Veri göçü projesi',
+		detail: 'Legacy sistemden yeni platforma veri aktarımı',
+		estimatedDays: 25,
+	},
+	{
+		title: 'Güvenlik denetimi ve iyileştirme',
+		detail: 'Penetrasyon testi ve güvenlik açıklarının giderilmesi',
+		estimatedDays: 20,
+	},
+	{
+		title: 'E-posta bildirim sistemi',
+		detail: 'Transactional ve marketing e-posta altyapısı',
+		estimatedDays: 15,
+	},
+	{
+		title: 'Arama motoru entegrasyonu',
+		detail: 'Elasticsearch ile gelişmiş arama özellikleri',
+		estimatedDays: 18,
+	},
 ];
 
 const ADHOC_TASKS = [
@@ -104,10 +146,6 @@ const ADHOC_TASKS = [
 	{ title: 'Kullanıcı eğitim materyali hazırlama', ticketNo: 'SR-2026-052' },
 	{ title: 'DNS yapılandırma değişikliği', ticketNo: 'CHG-2026-021' },
 	{ title: 'Eski modül devre dışı bırakma', ticketNo: 'CHG-2026-025' },
-];
-
-const STATUSES: Array<'BACKLOG' | 'TODO' | 'IN_PROGRESS' | 'DONE'> = [
-	'BACKLOG', 'TODO', 'IN_PROGRESS', 'DONE',
 ];
 
 async function main() {
@@ -182,9 +220,13 @@ async function main() {
 		const t = ANNUAL_PLAN_TASKS[i];
 		const progress = randomInt(0, 10) * 10;
 		const status: 'BACKLOG' | 'TODO' | 'IN_PROGRESS' | 'DONE' =
-			progress === 100 ? 'DONE' :
-			progress >= 50 ? 'IN_PROGRESS' :
-			progress > 0 ? 'TODO' : 'BACKLOG';
+			progress === 100
+				? 'DONE'
+				: progress >= 50
+					? 'IN_PROGRESS'
+					: progress > 0
+						? 'TODO'
+						: 'BACKLOG';
 
 		const existing = await prisma.task.findFirst({
 			where: { userId, title: t.title, type: 'ANNUAL_PLAN' },
@@ -223,8 +265,7 @@ async function main() {
 		const t = ADHOC_TASKS[i];
 		const progress = randomInt(3, 10) * 10;
 		const status: 'BACKLOG' | 'TODO' | 'IN_PROGRESS' | 'DONE' =
-			progress === 100 ? 'DONE' :
-			progress >= 50 ? 'IN_PROGRESS' : 'TODO';
+			progress === 100 ? 'DONE' : progress >= 50 ? 'IN_PROGRESS' : 'TODO';
 		const daysSpent = randomFloat(0.5, 5);
 
 		const existing = await prisma.task.findFirst({
@@ -288,7 +329,7 @@ async function main() {
 	console.log(`  ✅ Ocak: ${janCount} efor kaydı oluşturuldu (${janDays.length} iş günü)`);
 
 	// ─── Şubat 2026 WorkLog'ları (19'una kadar) ─────────────
-	console.log('\n📅 Şubat 2026 efor kayıtları oluşturuluyor (19\'una kadar)...');
+	console.log("\n📅 Şubat 2026 efor kayıtları oluşturuluyor (19'una kadar)...");
 	const febDays = getBusinessDays(2026, 1, 19); // Şubat 1-19 arası iş günleri
 	let febCount = 0;
 

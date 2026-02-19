@@ -3,9 +3,9 @@ import bcrypt from 'bcryptjs';
 const SALT_ROUNDS = 12;
 
 export async function saltAndHashPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, SALT_ROUNDS);
+	return bcrypt.hash(password, SALT_ROUNDS);
 }
 
 export async function verifyPassword(password: string, hash: string): Promise<boolean> {
-    return bcrypt.compare(password, hash);
+	return bcrypt.compare(password, hash);
 }

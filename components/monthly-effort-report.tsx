@@ -6,11 +6,7 @@ import type { YearlyStats } from '@/app/actions/work-log';
 import { Card, CardContent } from '@/components/ui/card';
 import { getDaysInMonth } from 'date-fns';
 import { Loader2 } from 'lucide-react';
-import {
-	type WorkLog,
-	type Task,
-	type Project,
-} from '@/prisma/generated/client';
+import { type WorkLog, type Task, type Project } from '@/prisma/generated/client';
 import { WorkLogDataTable } from './work-log-data-table';
 import { MonthNavigator } from './widget/month-navigator';
 import { SummaryCards } from './widget/summary-cards';
@@ -32,10 +28,7 @@ export function MonthlyEffortReport() {
 	const fetchLogs = useCallback(async () => {
 		setLoading(true);
 		try {
-			const data = await getWorkLogs(
-				date.getMonth() + 1,
-				date.getFullYear(),
-			);
+			const data = await getWorkLogs(date.getMonth() + 1, date.getFullYear());
 			setLogs(data as WorkLogWithTask[]);
 		} catch (error) {
 			console.error('Failed to fetch logs:', error);
@@ -61,10 +54,8 @@ export function MonthlyEffortReport() {
 		fetchYearlyStats();
 	}, [fetchLogs, fetchYearlyStats]);
 
-	const previousMonth = () =>
-		setDate(new Date(date.getFullYear(), date.getMonth() - 1, 1));
-	const nextMonth = () =>
-		setDate(new Date(date.getFullYear(), date.getMonth() + 1, 1));
+	const previousMonth = () => setDate(new Date(date.getFullYear(), date.getMonth() - 1, 1));
+	const nextMonth = () => setDate(new Date(date.getFullYear(), date.getMonth() + 1, 1));
 
 	const totalDays = logs.reduce((acc, log) => acc + log.daysWorked, 0);
 
@@ -95,8 +86,7 @@ export function MonthlyEffortReport() {
 			const logDate = new Date(log.date);
 			const dayIndex = logDate.getDate() - 1;
 			if (dayIndex >= 0 && dayIndex < daysCount) {
-				const bucket =
-					log.task.type === 'ANNUAL_PLAN' ? 'annualPlan' : 'adHoc';
+				const bucket = log.task.type === 'ANNUAL_PLAN' ? 'annualPlan' : 'adHoc';
 				dailyMap[dayIndex][bucket] += log.daysWorked;
 				dailyMap[dayIndex].total += log.daysWorked;
 			}
@@ -112,11 +102,7 @@ export function MonthlyEffortReport() {
 
 	return (
 		<div className='space-y-6'>
-			<MonthNavigator
-				date={date}
-				onPreviousMonth={previousMonth}
-				onNextMonth={nextMonth}
-			/>
+			<MonthNavigator date={date} onPreviousMonth={previousMonth} onNextMonth={nextMonth} />
 
 			<SummaryCards
 				totalDays={totalDays}
@@ -125,9 +111,7 @@ export function MonthlyEffortReport() {
 				date={date}
 			/>
 
-			{!loading && (
-				<DailyEffortChart data={dailyEffortData} date={date} />
-			)}
+			{!loading && <DailyEffortChart data={dailyEffortData} date={date} />}
 
 			{yearlyLoading ? (
 				<div className='flex justify-center p-8'>

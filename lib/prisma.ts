@@ -2,12 +2,14 @@
 import { PrismaClient } from '../prisma/generated/client';
 
 declare global {
-  var prisma: undefined | PrismaClient;
+	var prisma: undefined | PrismaClient;
 }
 
-const prisma = global.prisma ?? new PrismaClient({
-  accelerateUrl: process.env.DATABASE_URL
-} as any);
+const prisma =
+	global.prisma ??
+	new PrismaClient({
+		accelerateUrl: process.env.DATABASE_URL,
+	} as any);
 
 export default prisma;
 

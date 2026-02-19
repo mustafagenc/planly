@@ -37,11 +37,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
-import {
-	InputGroup,
-	InputGroupAddon,
-	InputGroupInput,
-} from '@/components/ui/input-group';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { cn } from '@/lib/utils';
 import {
 	CalendarDays,
@@ -91,31 +87,29 @@ const TYPE_CONFIG: Record<
 	},
 };
 
-const STATUS_CONFIG: Record<
-	TaskStatus,
-	{ label: string; icon: typeof Clock; className: string }
-> = {
-	BACKLOG: {
-		label: 'Beklemede',
-		icon: CircleDashed,
-		className: 'bg-muted text-muted-foreground',
-	},
-	TODO: {
-		label: 'Yapılacak',
-		icon: Clock,
-		className: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-	},
-	IN_PROGRESS: {
-		label: 'Devam Ediyor',
-		icon: AlertCircle,
-		className: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-	},
-	DONE: {
-		label: 'Tamamlandı',
-		icon: CheckCircle2,
-		className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-	},
-};
+const STATUS_CONFIG: Record<TaskStatus, { label: string; icon: typeof Clock; className: string }> =
+	{
+		BACKLOG: {
+			label: 'Beklemede',
+			icon: CircleDashed,
+			className: 'bg-muted text-muted-foreground',
+		},
+		TODO: {
+			label: 'Yapılacak',
+			icon: Clock,
+			className: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+		},
+		IN_PROGRESS: {
+			label: 'Devam Ediyor',
+			icon: AlertCircle,
+			className: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+		},
+		DONE: {
+			label: 'Tamamlandı',
+			icon: CheckCircle2,
+			className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+		},
+	};
 
 function TypeBadge({ type }: { type: TaskType }) {
 	const config = TYPE_CONFIG[type];
@@ -165,9 +159,7 @@ function ProgressBar({ value, status }: { value: number; status: TaskStatus }) {
 					style={{ width: `${Math.max(value, 2)}%` }}
 				/>
 			</div>
-			<span className='text-xs text-muted-foreground tabular-nums'>
-				%{value}
-			</span>
+			<span className='text-xs text-muted-foreground tabular-nums'>%{value}</span>
 		</div>
 	);
 }
@@ -203,9 +195,7 @@ function buildColumns(
 	return [
 		{
 			accessorKey: 'type',
-			header: ({ column }) => (
-				<SortableHeader column={column}>Tip</SortableHeader>
-			),
+			header: ({ column }) => <SortableHeader column={column}>Tip</SortableHeader>,
 			cell: ({ row }) => <TypeBadge type={row.original.type} />,
 			filterFn: (row, _id, filterValue: string) => {
 				if (filterValue === 'all') return true;
@@ -216,13 +206,9 @@ function buildColumns(
 		{
 			accessorKey: 'project.name',
 			id: 'project',
-			header: ({ column }) => (
-				<SortableHeader column={column}>Proje</SortableHeader>
-			),
+			header: ({ column }) => <SortableHeader column={column}>Proje</SortableHeader>,
 			cell: ({ row }) => (
-				<span className='font-medium text-sm'>
-					{row.original.project.name}
-				</span>
+				<span className='font-medium text-sm'>{row.original.project.name}</span>
 			),
 			filterFn: (row, _id, filterValue: string) => {
 				if (filterValue === 'all') return true;
@@ -231,17 +217,13 @@ function buildColumns(
 		},
 		{
 			accessorKey: 'title',
-			header: ({ column }) => (
-				<SortableHeader column={column}>Başlık</SortableHeader>
-			),
+			header: ({ column }) => <SortableHeader column={column}>Başlık</SortableHeader>,
 			cell: ({ row }) => {
 				const task = row.original;
 				return (
 					<div className='max-w-[300px]'>
 						<div className='flex items-center gap-1.5'>
-							<span className='text-sm truncate'>
-								{task.title}
-							</span>
+							<span className='text-sm truncate'>{task.title}</span>
 							{task.ticketNo && (
 								<span className='text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-mono font-medium shrink-0'>
 									{task.ticketNo}
@@ -259,9 +241,7 @@ function buildColumns(
 		},
 		{
 			accessorKey: 'status',
-			header: ({ column }) => (
-				<SortableHeader column={column}>Durum</SortableHeader>
-			),
+			header: ({ column }) => <SortableHeader column={column}>Durum</SortableHeader>,
 			cell: ({ row }) => <StatusBadge status={row.original.status} />,
 			filterFn: (row, _id, filterValue: string) => {
 				if (filterValue === 'all') return true;
@@ -272,9 +252,7 @@ function buildColumns(
 		{
 			accessorKey: 'responsible.name',
 			id: 'responsible',
-			header: ({ column }) => (
-				<SortableHeader column={column}>Sorumlu</SortableHeader>
-			),
+			header: ({ column }) => <SortableHeader column={column}>Sorumlu</SortableHeader>,
 			cell: ({ row }) => (
 				<span className='text-sm text-foreground/80'>
 					{row.original.responsible?.name ?? '-'}
@@ -284,25 +262,17 @@ function buildColumns(
 		},
 		{
 			accessorKey: 'daysSpent',
-			header: ({ column }) => (
-				<SortableHeader column={column}>Efor</SortableHeader>
-			),
+			header: ({ column }) => <SortableHeader column={column}>Efor</SortableHeader>,
 			cell: ({ row }) => {
 				const task = row.original;
 				const estimated = task.estimatedDays;
 				return (
 					<div className='text-right'>
-						<span className='font-semibold text-sm tabular-nums'>
-							{task.daysSpent}
-						</span>
+						<span className='font-semibold text-sm tabular-nums'>{task.daysSpent}</span>
 						{estimated != null && estimated > 0 && (
-							<span className='text-xs text-muted-foreground'>
-								/{estimated}
-							</span>
+							<span className='text-xs text-muted-foreground'>/{estimated}</span>
 						)}
-						<span className='text-xs text-muted-foreground ml-0.5'>
-							gün
-						</span>
+						<span className='text-xs text-muted-foreground ml-0.5'>gün</span>
 					</div>
 				);
 			},
@@ -310,14 +280,9 @@ function buildColumns(
 		},
 		{
 			accessorKey: 'progress',
-			header: ({ column }) => (
-				<SortableHeader column={column}>İlerleme</SortableHeader>
-			),
+			header: ({ column }) => <SortableHeader column={column}>İlerleme</SortableHeader>,
 			cell: ({ row }) => (
-				<ProgressBar
-					value={row.original.progress}
-					status={row.original.status}
-				/>
+				<ProgressBar value={row.original.progress} status={row.original.status} />
 			),
 			size: 140,
 		},
@@ -330,7 +295,6 @@ function buildColumns(
 					<div className='flex items-center gap-0.5'>
 						<EditTaskDialog
 							task={task}
-							projects={projects}
 							units={units}
 							people={people}
 							trigger={
@@ -364,24 +328,15 @@ function buildColumns(
 	];
 }
 
-export function TaskDataTable({
-	tasks,
-	projects,
-	units,
-	people,
-}: TaskDataTableProps) {
+export function TaskDataTable({ tasks, projects, units, people }: TaskDataTableProps) {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-		{},
-	);
+	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const [globalFilter, setGlobalFilter] = useState('');
 
-	const columns = useMemo(
-		() => buildColumns(projects, units, people),
-		[projects, units, people],
-	);
+	const columns = useMemo(() => buildColumns(projects, units, people), [projects, units, people]);
 
+	// eslint-disable-next-line react-hooks/incompatible-library
 	const table = useReactTable({
 		data: tasks,
 		columns,
@@ -401,8 +356,7 @@ export function TaskDataTable({
 				task.title.toLowerCase().includes(search) ||
 				task.project.name.toLowerCase().includes(search) ||
 				(task.ticketNo?.toLowerCase().includes(search) ?? false) ||
-				(task.responsible?.name.toLowerCase().includes(search) ??
-					false) ||
+				(task.responsible?.name.toLowerCase().includes(search) ?? false) ||
 				(task.detail?.toLowerCase().includes(search) ?? false)
 			);
 		},
@@ -411,19 +365,15 @@ export function TaskDataTable({
 		},
 	});
 
-	const typeFilter =
-		(table.getColumn('type')?.getFilterValue() as string) ?? 'all';
-	const statusFilter =
-		(table.getColumn('status')?.getFilterValue() as string) ?? 'all';
+	const typeFilter = (table.getColumn('type')?.getFilterValue() as string) ?? 'all';
+	const statusFilter = (table.getColumn('status')?.getFilterValue() as string) ?? 'all';
 
 	return (
 		<div className='space-y-4'>
 			{/* Header */}
 			<div className='flex items-center justify-between flex-wrap gap-4'>
 				<div>
-					<h2 className='text-xl font-semibold tracking-tight'>
-						İş Listesi
-					</h2>
+					<h2 className='text-xl font-semibold tracking-tight'>İş Listesi</h2>
 					<p className='text-sm text-muted-foreground mt-0.5'>
 						Toplam{' '}
 						<span className='font-medium text-foreground'>
@@ -448,9 +398,7 @@ export function TaskDataTable({
 				</InputGroup>
 				<Select
 					value={typeFilter}
-					onValueChange={(v) =>
-						table.getColumn('type')?.setFilterValue(v)
-					}
+					onValueChange={(v) => table.getColumn('type')?.setFilterValue(v)}
 				>
 					<SelectTrigger className='w-[150px]'>
 						<SelectValue placeholder='Tip' />
@@ -463,9 +411,7 @@ export function TaskDataTable({
 				</Select>
 				<Select
 					value={statusFilter}
-					onValueChange={(v) =>
-						table.getColumn('status')?.setFilterValue(v)
-					}
+					onValueChange={(v) => table.getColumn('status')?.setFilterValue(v)}
 				>
 					<SelectTrigger className='w-[150px]'>
 						<SelectValue placeholder='Durum' />
@@ -474,18 +420,12 @@ export function TaskDataTable({
 						<SelectItem value='all'>Tüm Durumlar</SelectItem>
 						<SelectItem value='BACKLOG'>Beklemede</SelectItem>
 						<SelectItem value='TODO'>Yapılacak</SelectItem>
-						<SelectItem value='IN_PROGRESS'>
-							Devam Ediyor
-						</SelectItem>
+						<SelectItem value='IN_PROGRESS'>Devam Ediyor</SelectItem>
 						<SelectItem value='DONE'>Tamamlandı</SelectItem>
 					</SelectContent>
 				</Select>
 				<div className='ml-auto'>
-					<CreateTaskDialog
-						projects={projects}
-						units={units}
-						people={people}
-					/>
+					<CreateTaskDialog projects={projects} units={units} people={people} />
 				</div>
 			</div>
 
@@ -511,8 +451,7 @@ export function TaskDataTable({
 										{header.isPlaceholder
 											? null
 											: flexRender(
-													header.column.columnDef
-														.header,
+													header.column.columnDef.header,
 													header.getContext(),
 												)}
 									</TableHead>
@@ -604,9 +543,7 @@ export function TaskDataTable({
 						variant='outline'
 						size='sm'
 						className='h-8 w-8 p-0'
-						onClick={() =>
-							table.setPageIndex(table.getPageCount() - 1)
-						}
+						onClick={() => table.setPageIndex(table.getPageCount() - 1)}
 						disabled={!table.getCanNextPage()}
 					>
 						<ChevronsRight className='h-3.5 w-3.5' />

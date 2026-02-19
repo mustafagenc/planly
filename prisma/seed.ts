@@ -6,9 +6,7 @@ import * as fs from 'fs';
 
 import prisma from '../lib/prisma';
 
-function parseStatus(
-	statusRaw: any,
-): 'BACKLOG' | 'TODO' | 'IN_PROGRESS' | 'DONE' {
+function parseStatus(statusRaw: any): 'BACKLOG' | 'TODO' | 'IN_PROGRESS' | 'DONE' {
 	const s = String(statusRaw ?? '')
 		.trim()
 		.toLowerCase();
@@ -20,9 +18,7 @@ function parseStatus(
 
 function parseProgress(progressRaw: any): number {
 	if (typeof progressRaw === 'number') {
-		return progressRaw <= 1
-			? Math.round(progressRaw * 100)
-			: Math.round(progressRaw);
+		return progressRaw <= 1 ? Math.round(progressRaw * 100) : Math.round(progressRaw);
 	}
 	if (typeof progressRaw === 'string') {
 		const match = progressRaw.match(/%(\d+)/);
@@ -148,9 +144,7 @@ async function processAdHocSheet(data: any[], userId: string) {
 
 		const progress = parseProgress(progressRaw);
 		const daysSpent =
-			typeof daysSpentRaw === 'number'
-				? daysSpentRaw
-				: parseFloat(daysSpentRaw) || 0;
+			typeof daysSpentRaw === 'number' ? daysSpentRaw : parseFloat(daysSpentRaw) || 0;
 		const status =
 			progress === 100
 				? ('DONE' as const)
@@ -178,9 +172,7 @@ async function processAdHocSheet(data: any[], userId: string) {
 					title: String(description).trim(),
 					remarks: remarks ? String(remarks).trim() : null,
 					ticketNo: ticketNo ? String(ticketNo).trim() : null,
-					coResponsible: coResponsible
-						? String(coResponsible).trim()
-						: null,
+					coResponsible: coResponsible ? String(coResponsible).trim() : null,
 					daysSpent,
 					progress,
 				},
@@ -193,9 +185,7 @@ async function processAdHocSheet(data: any[], userId: string) {
 					responsibleId: person?.id,
 					remarks: remarks ? String(remarks).trim() : null,
 					ticketNo: ticketNo ? String(ticketNo).trim() : null,
-					coResponsible: coResponsible
-						? String(coResponsible).trim()
-						: null,
+					coResponsible: coResponsible ? String(coResponsible).trim() : null,
 					daysSpent,
 					progress,
 				},
@@ -206,14 +196,7 @@ async function processAdHocSheet(data: any[], userId: string) {
 		if (monthRaw && daysSpent > 0) {
 			const monthIndex = parseInt(monthRaw, 10) - 1;
 			if (monthIndex >= 0 && monthIndex < 12) {
-				const workDate = new Date(
-					new Date().getFullYear(),
-					monthIndex,
-					1,
-					12,
-					0,
-					0,
-				);
+				const workDate = new Date(new Date().getFullYear(), monthIndex, 1, 12, 0, 0);
 				const existingLog = await prisma.workLog.findFirst({
 					where: { userId, taskId: task.id, date: workDate },
 				});
@@ -228,9 +211,7 @@ async function processAdHocSheet(data: any[], userId: string) {
 							description: `${description} (${monthRaw}. Ay Eforu)`,
 						},
 					});
-					console.log(
-						`  WorkLog: ${daysSpent} days (Month ${monthRaw})`,
-					);
+					console.log(`  WorkLog: ${daysSpent} days (Month ${monthRaw})`);
 				} else {
 					await prisma.workLog.update({
 						where: { id: existingLog.id },
@@ -280,16 +261,12 @@ async function main() {
 	const workbook = XLSX.readFile(filePath);
 
 	if (workbook.SheetNames.length > 0) {
-		const data = XLSX.utils.sheet_to_json(
-			workbook.Sheets[workbook.SheetNames[0]],
-		);
+		const data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
 		await processAnnualPlanSheet(data, admin.id);
 	}
 
 	if (workbook.SheetNames.length > 1) {
-		const data = XLSX.utils.sheet_to_json(
-			workbook.Sheets[workbook.SheetNames[1]],
-		);
+		const data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[1]]);
 		await processAdHocSheet(data, admin.id);
 	}
 }
