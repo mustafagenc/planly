@@ -46,6 +46,7 @@ model AnnualPlan {
   
   estimatedDays Float?
   progress      Int      @default(0)
+  order         Int      @default(0)
   
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -71,6 +72,7 @@ model AdHocTask {
   daysSpent      Float?
   progress       Int      @default(0)
   previousStatus String?
+  order          Int      @default(0)
   
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt

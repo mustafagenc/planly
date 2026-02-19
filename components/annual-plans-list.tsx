@@ -2,147 +2,365 @@
 
 import { AnnualPlan, Project, Unit, Person } from '@/prisma/generated/client';
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, Clock, AlertCircle } from 'lucide-react';
+import { CheckCircle2, Clock, AlertCircle, Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 import { WorkLogDialog } from './work-log-dialog';
 import { CreateAnnualPlanDialog } from './create-annual-plan-dialog';
 import { EditAnnualPlanDialog } from './edit-annual-plan-dialog';
-import { Pencil } from 'lucide-react';
+import {
+	DndContext,
+	closestCenter,
+	KeyboardSensor,
+	PointerSensor,
+	useSensor,
+	useSensors,
+	DragEndEvent,
+} from '@dnd-kit/core';
+import {
+	arrayMove,
+	SortableContext,
+	sortableKeyboardCoordinates,
+	rectSortingStrategy,
+	useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { reorderAnnualPlans } from '@/app/actions/reorder';
+import { useEffect } from 'react';
 
 interface AnnualPlansListProps {
-    plans: (AnnualPlan & {
-        project: Project;
-        unit: Unit | null;
-        responsible: Person | null;
-    })[];
-    projects: Project[];
-    units: Unit[];
-    people: Person[];
+	plans: (AnnualPlan & {
+		project: Project;
+		unit: Unit | null;
+		responsible: Person | null;
+	})[];
+	projects: Project[];
+	units: Unit[];
+	people: Person[];
 }
 
-export function AnnualPlansList({ plans, projects, units, people }: AnnualPlansListProps) {
-    const [filter, setFilter] = useState('');
+export function AnnualPlansList({
+	plans,
+	projects,
+	units,
+	people,
+}: AnnualPlansListProps) {
+	const [showCompleted, setShowCompleted] = useState(false);
 
-    const filteredPlans = plans.filter((plan) =>
-        plan.taskSummary.toLowerCase().includes(filter.toLowerCase()) ||
-        plan.project.name.toLowerCase().includes(filter.toLowerCase())
-    );
+	// Separate active and backlog plans
+	// We maintain a local state for backlog to support DnD updates
+	const [backlogPlans, setBacklogPlans] = useState<
+		(AnnualPlan & {
+			project: Project;
+			unit: Unit | null;
+			responsible: Person | null;
+		})[]
+	>(() => {
+		return plans
+			.filter((p) => p.progress === 0 && p.status !== 'Tamamlandı')
+			.sort((a, b) => (a.order || 0) - (b.order || 0));
+	});
 
-    return (
-        <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h2 className="text-2xl font-bold tracking-tight">Yıllık İş Planı</h2>
-                    <p className="text-muted-foreground">
-                        Planlanan işlerinizi takip edin ve yönetin.
-                    </p>
-                </div>
-                <CreateAnnualPlanDialog projects={projects} units={units} people={people} />
-            </div>
+	const sensors = useSensors(
+		useSensor(PointerSensor),
+		useSensor(KeyboardSensor, {
+			coordinateGetter: sortableKeyboardCoordinates,
+		}),
+	);
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {filteredPlans.map((plan) => (
-                    <Card key={plan.id} className="group hover:shadow-md transition-shadow relative">
-                        <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-                            <div className="space-y-1">
-                                <CardTitle className="text-base font-semibold">
-                                    {plan.project.name}
-                                </CardTitle>
-                                <CardDescription className="text-xs">
-                                    {plan.unit?.name || 'Genel'}
-                                </CardDescription>
-                            </div>
-                            <StatusBadge status={plan.status} />
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-sm font-medium leading-none mb-2">
-                                {plan.taskSummary}
-                            </p>
-                            <p className="text-xs text-muted-foreground line-clamp-2 mb-4">
-                                {plan.detail}
-                            </p>
+	// Initialize/Update local state when props change
+	useEffect(() => {
+		// Initial Sort: Order ASC
+		const backlog = plans
+			.filter((p) => p.progress === 0 && p.status !== 'Tamamlandı')
+			.sort((a, b) => (a.order || 0) - (b.order || 0));
+		setBacklogPlans(backlog);
+	}, [plans]);
 
-                            <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
-                                <div className="flex items-center gap-1">
-                                    <span className="font-medium text-foreground">{plan.responsible?.name || '-'}</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                    <span>{plan.progress}%</span>
-                                </div>
-                            </div>
+	const handleDragEnd = async (event: DragEndEvent) => {
+		const { active, over } = event;
 
-                            <div className="flex items-center justify-between">
-                                {/* Edit and other actions */}
-                                <div className="flex gap-1">
-                                    <EditAnnualPlanDialog
-                                        plan={plan}
-                                        people={people}
-                                        trigger={
-                                            <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground">
-                                                <Pencil className="h-3 w-3" />
-                                            </Button>
-                                        }
-                                    />
-                                </div>
-                                <WorkLogDialog
-                                    title={plan.taskSummary}
-                                    annualPlanId={plan.id}
-                                    trigger={
-                                        <Button variant="ghost" size="sm" className="h-6 text-xs px-2 -ml-2">
-                                            <Clock className="mr-1 h-3 w-3" /> Efor Gir
-                                        </Button>
-                                    }
-                                />
-                            </div>
+		if (active.id !== over?.id) {
+			setBacklogPlans((items) => {
+				const oldIndex = items.findIndex(
+					(item) => item.id === active.id,
+				);
+				const newIndex = items.findIndex(
+					(item) => item.id === over?.id,
+				);
 
-                            <div className="mt-2 h-2 w-full bg-secondary rounded-full overflow-hidden absolute bottom-0 left-0 right-0 rounded-t-none">
-                                <div
-                                    className="h-full bg-primary transition-all duration-500"
-                                    style={{ width: `${plan.progress}%` }}
-                                />
-                            </div>
-                        </CardContent>
-                    </Card>
-                ))}
+				const newItems = arrayMove(items, oldIndex, newIndex);
 
-                {filteredPlans.length === 0 && (
-                    <div className="col-span-full py-12 text-center text-muted-foreground">
-                        Kayıt bulunamadı.
-                    </div>
-                )}
-            </div>
-        </div>
-    );
+				// Call server action to persist order
+				// We map to { id, order } where order is the index
+				const updates = newItems.map((item, index) => ({
+					id: item.id,
+					order: index,
+				}));
+
+				// Optimistically update
+				reorderAnnualPlans(updates);
+
+				return newItems;
+			});
+		}
+	};
+
+	// Active Plans: Progress > 0 OR Status is Completed
+	// Sorted by updatedAt DESC (Most recently worked on/completed at top)
+	const activePlans = plans
+		.filter((p) => p.progress > 0 || p.status === 'Tamamlandı')
+		.sort(
+			(a, b) =>
+				new Date(b.updatedAt).getTime() -
+				new Date(a.updatedAt).getTime(),
+		);
+
+
+	const PlanCard = ({
+		plan,
+	}: {
+		plan: AnnualPlan & {
+			project: Project;
+			unit: Unit | null;
+			responsible: Person | null;
+		};
+	}) => (
+		<Card className='group hover:shadow-md transition-shadow relative h-full'>
+			<CardHeader className='flex flex-row items-start justify-between space-y-0 pb-2'>
+				<div className='space-y-1'>
+					<CardTitle className='text-base font-semibold'>
+						{plan.project.name}
+					</CardTitle>
+					<CardDescription className='text-xs'>
+						{plan.unit?.name || 'Genel'}
+					</CardDescription>
+				</div>
+				<StatusBadge status={plan.status} />
+			</CardHeader>
+			<CardContent>
+				<p className='text-sm font-medium leading-none mb-2'>
+					{plan.taskSummary}
+				</p>
+				<p className='text-xs text-muted-foreground line-clamp-2 mb-4'>
+					{plan.detail}
+				</p>
+
+				<div className='flex items-center justify-between text-xs text-muted-foreground mb-4'>
+					<div className='flex items-center gap-1'>
+						<span className='font-medium text-foreground'>
+							{plan.responsible?.name || '-'}
+						</span>
+					</div>
+					<div className='flex items-center gap-1'>
+						<span>{plan.progress}%</span>
+					</div>
+				</div>
+
+				<div className='flex items-center justify-between'>
+					<div className='flex gap-1'>
+						<EditAnnualPlanDialog
+							plan={plan}
+							people={people}
+							trigger={
+								<Button
+									variant='ghost'
+									size='sm'
+									className='h-6 w-6 p-0 text-muted-foreground hover:text-foreground'
+								>
+									<Pencil className='h-3 w-3' />
+								</Button>
+							}
+						/>
+					</div>
+					<WorkLogDialog
+						title={plan.taskSummary}
+						annualPlanId={plan.id}
+						trigger={
+							<Button
+								variant='ghost'
+								size='sm'
+								className='h-6 text-xs px-2 -ml-2'
+							>
+								<Clock className='mr-1 h-3 w-3' /> Efor Gir
+							</Button>
+						}
+					/>
+				</div>
+
+				<div className='mt-2 h-2 w-full bg-secondary rounded-full overflow-hidden absolute bottom-0 left-0 right-0 rounded-t-none'>
+					<div
+						className='h-full bg-primary transition-all duration-500'
+						style={{ width: `${plan.progress}%` }}
+					/>
+				</div>
+			</CardContent>
+		</Card>
+	);
+
+	return (
+		<div className='space-y-6'>
+			<div className='flex items-center justify-between'>
+				<div>
+					<h2 className='text-2xl font-bold tracking-tight'>
+						Yıllık İş Planı
+					</h2>
+					<p className='text-muted-foreground'>
+						Planlanan işlerinizi takip edin ve yönetin.
+					</p>
+				</div>
+				<div className='flex items-center gap-4'>
+					<div className='flex items-center space-x-2'>
+						<Switch
+							id='show-completed'
+							checked={showCompleted}
+							onCheckedChange={setShowCompleted}
+						/>
+						<Label htmlFor='show-completed'>
+							Tamamlananları Göster
+						</Label>
+					</div>
+					<CreateAnnualPlanDialog
+						projects={projects}
+						units={units}
+						people={people}
+					/>
+				</div>
+			</div>
+
+			<div className='space-y-8'>
+					{/* Active Section */}
+					{activePlans.length > 0 && (
+						<div className='space-y-4'>
+							<h3 className='text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2'>
+								<div className='h-1 w-1 rounded-full bg-green-500' />
+								Devam Eden / Tamamlanan
+							</h3>
+							<div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
+								{activePlans
+									.filter((p) =>
+										showCompleted
+											? true
+											: p.status !== 'Tamamlandı',
+									)
+									.map((plan) => (
+										<div key={plan.id}>
+											<PlanCard plan={plan} />
+										</div>
+									))}
+							</div>
+						</div>
+					)}
+
+					{/* Backlog Section (Draggable) */}
+					<div className='space-y-4'>
+						<h3 className='text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2'>
+							<div className='h-1 w-1 rounded-full bg-blue-500' />
+							Yapılacaklar
+						</h3>
+						<DndContext
+							id='annual-plans-dnd'
+							sensors={sensors}
+							collisionDetection={closestCenter}
+							onDragEnd={handleDragEnd}
+						>
+							<SortableContext
+								items={backlogPlans.map((p) => p.id)}
+								strategy={rectSortingStrategy}
+							>
+								<div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
+									{backlogPlans.map((plan) => (
+										<SortablePlanCard
+											key={plan.id}
+											plan={plan}
+										>
+											<div className='h-full'>
+												<PlanCard plan={plan} />
+											</div>
+										</SortablePlanCard>
+									))}
+									{backlogPlans.length === 0 && (
+										<div className='col-span-full py-8 text-center text-muted-foreground border-2 border-dashed rounded-xl'>
+											Bekleyen iş yok.
+										</div>
+									)}
+								</div>
+							</SortableContext>
+						</DndContext>
+					</div>
+				</div>
+		</div>
+	);
 }
 
 function StatusBadge({ status }: { status: string }) {
-    const styles = {
-        'Beklemede': 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-        'Devam Ediyor': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-        'Tamamlandı': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-    };
+	const styles = {
+		Beklemede:
+			'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
+		'Devam Ediyor':
+			'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+		Tamamlandı:
+			'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+	};
 
-    const icons = {
-        'Beklemede': Clock,
-        'Devam Ediyor': AlertCircle,
-        'Tamamlandı': CheckCircle2
-    }
+	const icons = {
+		Beklemede: Clock,
+		'Devam Ediyor': AlertCircle,
+		Tamamlandı: CheckCircle2,
+	};
 
-    const Icon = icons[status as keyof typeof icons] || Clock;
-    const style = styles[status as keyof typeof styles] || 'bg-gray-100 text-gray-700';
+	const Icon = icons[status as keyof typeof icons] || Clock;
+	const style =
+		styles[status as keyof typeof styles] || 'bg-gray-100 text-gray-700';
 
-    return (
-        <span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium", style)}>
-            <Icon className="h-3 w-3" />
-            {status}
-        </span>
-    );
+	return (
+		<span
+			className={cn(
+				'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium',
+				style,
+			)}
+		>
+			<Icon className='h-3 w-3' />
+			{status}
+		</span>
+	);
+}
+
+function SortablePlanCard({
+	plan,
+	children,
+}: {
+	plan: AnnualPlan;
+	children: React.ReactNode;
+}) {
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({ id: plan.id });
+
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+		zIndex: isDragging ? 10 : 1,
+		opacity: isDragging ? 0.5 : 1,
+	};
+
+	return (
+		<div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+			{children}
+		</div>
+	);
 }

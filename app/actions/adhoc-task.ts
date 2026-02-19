@@ -9,7 +9,7 @@ export async function getAdHocTasks() {
       project: true,
       responsible: true,
     },
-    orderBy: { createdAt: 'desc' },
+    orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
   });
 }
 
