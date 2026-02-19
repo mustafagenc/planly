@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="30" failures="0" errors="0" time="5.864519399">
+    <testsuite name="__tests__/components/user-menu.test.tsx" timestamp="2026-02-19T21:46:28.598Z" hostname="mustafagenc.local" tests="7" failures="0" errors="0" skipped="0" time="0.228552564">
+        <testcase classname="__tests__/components/user-menu.test.tsx" name="UserMenu &gt; kullanıcı adı ve rolü gösterir" time="0.043334123">
+        </testcase>
+        <testcase classname="__tests__/components/user-menu.test.tsx" name="UserMenu &gt; ad yoksa e-postayı gösterir" time="0.00685651">
+        </testcase>
+        <testcase classname="__tests__/components/user-menu.test.tsx" name="UserMenu &gt; kullanıcının baş harflerini doğru hesaplar" time="0.004173021">
+        </testcase>
+        <testcase classname="__tests__/components/user-menu.test.tsx" name="UserMenu &gt; tek isimli kullanıcı baş harfi" time="0.004254561">
+        </testcase>
+        <testcase classname="__tests__/components/user-menu.test.tsx" name="UserMenu &gt; USER rolü &quot;Kullanıcı&quot; olarak gösterilir" time="0.004032419">
+        </testcase>
+        <testcase classname="__tests__/components/user-menu.test.tsx" name="UserMenu &gt; ADMIN rolü &quot;Admin&quot; olarak gösterilir" time="0.003588938">
+        </testcase>
+        <testcase classname="__tests__/components/user-menu.test.tsx" name="UserMenu &gt; çıkış butonu render edilir" time="0.160344404">
+        </testcase>
+    </testsuite>
+    <testsuite name="__tests__/lib/business-days.test.ts" timestamp="2026-02-19T21:46:28.603Z" hostname="mustafagenc.local" tests="8" failures="0" errors="0" skipped="0" time="0.00884042">
+        <testcase classname="__tests__/lib/business-days.test.ts" name="isBusinessDay &gt; Pazartesi-Cuma iş günüdür" time="0.001740452">
+        </testcase>
+        <testcase classname="__tests__/lib/business-days.test.ts" name="isBusinessDay &gt; Cumartesi ve Pazar iş günü değildir" time="0.00034577">
+        </testcase>
+        <testcase classname="__tests__/lib/business-days.test.ts" name="getBusinessDays &gt; Ocak 2026 iş günlerini doğru hesaplar" time="0.000400379">
+        </testcase>
+        <testcase classname="__tests__/lib/business-days.test.ts" name="getBusinessDays &gt; Şubat 2026 tüm iş günlerini doğru hesaplar" time="0.000322576">
+        </testcase>
+        <testcase classname="__tests__/lib/business-days.test.ts" name="getBusinessDays &gt; Şubat 2026 19 Şubata kadar iş günleri" time="0.000304056">
+        </testcase>
+        <testcase classname="__tests__/lib/business-days.test.ts" name="getBusinessDays &gt; upToDay ayın gün sayısını aşarsa sınırlar" time="0.000139013">
+        </testcase>
+        <testcase classname="__tests__/lib/business-days.test.ts" name="getBusinessDays &gt; tüm dönen tarihler iş günüdür" time="0.002765863">
+        </testcase>
+        <testcase classname="__tests__/lib/business-days.test.ts" name="getBusinessDays &gt; tarihler sıralı döner" time="0.000654397">
+        </testcase>
+    </testsuite>
+    <testsuite name="__tests__/lib/password.test.ts" timestamp="2026-02-19T21:46:28.606Z" hostname="mustafagenc.local" tests="6" failures="0" errors="0" skipped="0" time="5.608976225">
+        <testcase classname="__tests__/lib/password.test.ts" name="password utilities &gt; şifreyi hashler ve doğrular" time="0.755147592">
+        </testcase>
+        <testcase classname="__tests__/lib/password.test.ts" name="password utilities &gt; yanlış şifreyi reddeder" time="0.714742835">
+        </testcase>
+        <testcase classname="__tests__/lib/password.test.ts" name="password utilities &gt; aynı şifre için farklı hashler üretir (salt)" time="1.452681343">
+        </testcase>
+        <testcase classname="__tests__/lib/password.test.ts" name="password utilities &gt; boş şifre hashlenir" time="1.084245719">
+        </testcase>
+        <testcase classname="__tests__/lib/password.test.ts" name="password utilities &gt; özel karakterli şifreyi destekler" time="0.723292678">
+        </testcase>
+        <testcase classname="__tests__/lib/password.test.ts" name="password utilities &gt; uzun şifreyi destekler" time="0.876034932">
+        </testcase>
+    </testsuite>
+    <testsuite name="__tests__/lib/utils.test.ts" timestamp="2026-02-19T21:46:28.608Z" hostname="mustafagenc.local" tests="9" failures="0" errors="0" skipped="0" time="0.01815019">
+        <testcase classname="__tests__/lib/utils.test.ts" name="cn (classname merge utility) &gt; tek string birleştirir" time="0.012689131">
+        </testcase>
+        <testcase classname="__tests__/lib/utils.test.ts" name="cn (classname merge utility) &gt; birden fazla class birleştirir" time="0.000929049">
+        </testcase>
+        <testcase classname="__tests__/lib/utils.test.ts" name="cn (classname merge utility) &gt; çakışan tailwind classlarında sonuncuyu korur" time="0.000557881">
+        </testcase>
+        <testcase classname="__tests__/lib/utils.test.ts" name="cn (classname merge utility) &gt; koşullu classları destekler" time="0.000500574">
+        </testcase>
+        <testcase classname="__tests__/lib/utils.test.ts" name="cn (classname merge utility) &gt; undefined ve null değerleri yok sayar" time="0.00049608">
+        </testcase>
+        <testcase classname="__tests__/lib/utils.test.ts" name="cn (classname merge utility) &gt; boş çağrıda boş string döner" time="0.000330086">
+        </testcase>
+        <testcase classname="__tests__/lib/utils.test.ts" name="cn (classname merge utility) &gt; obje syntax destekler" time="0.00016043">
+        </testcase>
+        <testcase classname="__tests__/lib/utils.test.ts" name="cn (classname merge utility) &gt; dizi syntax destekler" time="0.000135407">
+        </testcase>
+        <testcase classname="__tests__/lib/utils.test.ts" name="cn (classname merge utility) &gt; padding çakışmalarını çözer" time="0.000364376">
+        </testcase>
+    </testsuite>
+</testsuites>

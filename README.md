@@ -1,6 +1,17 @@
+<div align="center">
+  <a href="https://planly.mustafagenc.info">
+    <img alt="Nitrokit Logo" src="https://raw.githubusercontent.com/mustafagenc/planly/refs/heads/main/public/apple-touch-icon.png" height="100">
+  </a>
+
 # Planly
 
 Kişisel iş planlama ve takip uygulaması. Yıllık iş planı, plan harici işler, efor takibi ve raporlama özelliklerini tek bir platformda sunar.
+
+[![Release](https://github.com/mustafagenc/planly/actions/workflows/release.yml/badge.svg)](https://github.com/mustafagenc/planly/actions/workflows/release.yml) [![codecov](https://codecov.io/gh/mustafagenc/planly/graph/badge.svg?token=U2u3tsQohg)](https://codecov.io/gh/mustafagenc/planly) [![CodeFactor](https://www.codefactor.io/repository/github/mustafagenc/planly/badge)](https://www.codefactor.io/repository/github/mustafagenc/planly)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmustafagenc%2Fplanly&env=DATABASE_URL,AUTH_SECRET,CODECOV_TOKEN&project-name=planly&repository-name=planly&redirect-url=https%3A%2F%2Fplanly.mustafagenc.info&developer-id=team_GGO1uoUHSkEmCgnnxlakap7Z&demo-title=Planly&demo-description=Ki%C5%9Fisel%20i%C5%9F%20planlama%20ve%20takip%20uygulamas%C4%B1&demo-url=https%3A%2F%2Fplanly.mustafagenc.info&demo-image=https%3A%2F%2Fraw.githubusercontent.com%2Fmustafagenc%2Fplanly%2Frefs%2Fheads%2Fmain%2Fpublic%2Fscreenshots%2Fhome.png)
+
+</div>
 
 ## Teknolojiler
 
