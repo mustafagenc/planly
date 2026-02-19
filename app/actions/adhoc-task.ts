@@ -1,7 +1,6 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { AdHocTask, Project, Person } from '@/prisma/generated/client';
 import { revalidatePath } from 'next/cache';
 
 export async function getAdHocTasks() {

@@ -2,8 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-
-import { Prisma } from '@/prisma/generated/client';
+import { type Prisma } from '@/prisma/generated/client';
 
 export async function getWorkLogs(month?: number, year?: number) {
   const where: Prisma.WorkLogWhereInput = {};

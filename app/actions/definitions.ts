@@ -3,7 +3,6 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
-// Projects
 export async function getProjects() {
   return await prisma.project.findMany({ orderBy: { name: 'asc' } });
 }

@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Noto_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next"
 import "@/styles/globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Footer } from "@/components/footer";
 
-const notoSans = Noto_Sans({variable:'--font-sans'});
+const notoSans = Noto_Sans({ variable: '--font-sans' });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,18 +22,36 @@ export const metadata: Metadata = {
   description: "İş Planlama & Takip",
 };
 
+import { TooltipProvider } from "@/components/ui/tooltip";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={notoSans.variable}>
+    <html lang="en" className={notoSans.variable} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
       >
-        {children}
-        <Analytics />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TooltipProvider>
+            <main className="min-h-screen bg-background flex flex-col">
+              <div className="flex-1 p-8">
+                <div className="max-w-7xl mx-auto space-y-8">
+                  {children}
+                  <Footer />
+                </div>
+              </div>
+            </main>
+          </TooltipProvider>
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );
