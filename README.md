@@ -89,7 +89,7 @@ Uygulama [http://localhost:3000](http://localhost:3000) adresinde çalışır.
 
 ## Proje Yapısı
 
-```
+```text
 app/
 ├── (protected)/          # Kimlik doğrulama gerektiren sayfalar
 │   ├── page.tsx          # Raporlar (Ana sayfa)
