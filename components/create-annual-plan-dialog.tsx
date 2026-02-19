@@ -80,13 +80,13 @@ export function CreateAnnualPlanDialog({ projects, units, people }: CreateAnnual
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button>
-                    <Plus className="mr-2 h-4 w-4" /> Yeni Plan
+                <Button size="sm" className="gap-1.5">
+                    <Plus className="h-4 w-4" /> Yeni Plan
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
-                    <DialogTitle>Yeni Yıllık Plan Oluştur</DialogTitle>
+                    <DialogTitle className="text-lg">Yeni Yıllık Plan</DialogTitle>
                     <DialogDescription>
                         Yıllık iş planına yeni bir görev ekleyin.
                     </DialogDescription>

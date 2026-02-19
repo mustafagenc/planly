@@ -135,10 +135,10 @@ export function AnnualPlansList({
 			responsible: Person | null;
 		};
 	}) => (
-		<Card className='group hover:shadow-md transition-shadow relative h-full'>
+		<Card className='group hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 relative h-full overflow-hidden border-border/60'>
 			<CardHeader className='flex flex-row items-start justify-between space-y-0 pb-2'>
 				<div className='space-y-1'>
-					<CardTitle className='text-base font-semibold'>
+					<CardTitle className='text-sm font-semibold tracking-tight'>
 						{plan.project.name}
 					</CardTitle>
 					<CardDescription className='text-xs'>
@@ -147,41 +147,39 @@ export function AnnualPlansList({
 				</div>
 				<StatusBadge status={plan.status} />
 			</CardHeader>
-			<CardContent>
-				<p className='text-sm font-medium leading-none mb-2'>
+			<CardContent className='pb-5'>
+				<p className='text-sm font-medium leading-snug mb-1.5'>
 					{plan.taskSummary}
 				</p>
-				<p className='text-xs text-muted-foreground line-clamp-2 mb-4'>
-					{plan.detail}
-				</p>
+				{plan.detail && (
+					<p className='text-xs text-muted-foreground/80 line-clamp-2 mb-4'>
+						{plan.detail}
+					</p>
+				)}
 
-				<div className='flex items-center justify-between text-xs text-muted-foreground mb-4'>
-					<div className='flex items-center gap-1'>
-						<span className='font-medium text-foreground'>
-							{plan.responsible?.name || '-'}
-						</span>
-					</div>
-					<div className='flex items-center gap-1'>
-						<span>{plan.progress}%</span>
-					</div>
+				<div className='flex items-center justify-between text-xs text-muted-foreground mb-3'>
+					<span className='font-medium text-foreground/80'>
+						{plan.responsible?.name || '-'}
+					</span>
+					<span className='font-mono text-xs font-semibold text-primary'>
+						{plan.progress}%
+					</span>
 				</div>
 
 				<div className='flex items-center justify-between'>
-					<div className='flex gap-1'>
-						<EditAnnualPlanDialog
-							plan={plan}
-							people={people}
-							trigger={
-								<Button
-									variant='ghost'
-									size='sm'
-									className='h-6 w-6 p-0 text-muted-foreground hover:text-foreground'
-								>
-									<Pencil className='h-3 w-3' />
-								</Button>
-							}
-						/>
-					</div>
+					<EditAnnualPlanDialog
+						plan={plan}
+						people={people}
+						trigger={
+							<Button
+								variant='ghost'
+								size='sm'
+								className='h-7 w-7 p-0 text-muted-foreground hover:text-foreground'
+							>
+								<Pencil className='h-3.5 w-3.5' />
+							</Button>
+						}
+					/>
 					<WorkLogDialog
 						title={plan.taskSummary}
 						annualPlanId={plan.id}
@@ -189,21 +187,21 @@ export function AnnualPlansList({
 							<Button
 								variant='ghost'
 								size='sm'
-								className='h-6 text-xs px-2 -ml-2'
+								className='h-7 text-xs px-2 text-muted-foreground hover:text-foreground'
 							>
 								<Clock className='mr-1 h-3 w-3' /> Efor Gir
 							</Button>
 						}
 					/>
 				</div>
-
-				<div className='mt-2 h-2 w-full bg-secondary rounded-full overflow-hidden absolute bottom-0 left-0 right-0 rounded-t-none'>
-					<div
-						className='h-full bg-primary transition-all duration-500'
-						style={{ width: `${plan.progress}%` }}
-					/>
-				</div>
 			</CardContent>
+			{/* Progress bar */}
+			<div className='absolute bottom-0 left-0 right-0 h-1 bg-secondary'>
+				<div
+					className='h-full bg-linear-to-r from-primary to-primary/70 transition-all duration-500'
+					style={{ width: `${plan.progress}%` }}
+				/>
+			</div>
 		</Card>
 	);
 
@@ -211,22 +209,22 @@ export function AnnualPlansList({
 		<div className='space-y-6'>
 			<div className='flex items-center justify-between'>
 				<div>
-					<h2 className='text-2xl font-bold tracking-tight'>
+					<h2 className='text-xl font-semibold tracking-tight'>
 						Yıllık İş Planı
 					</h2>
-					<p className='text-muted-foreground'>
-						Planlanan işlerinizi takip edin ve yönetin.
+					<p className='text-sm text-muted-foreground mt-0.5'>
+						Planlanan işlerinizi takip edin ve yönetin
 					</p>
 				</div>
-				<div className='flex items-center gap-4'>
-					<div className='flex items-center space-x-2'>
+				<div className='flex items-center gap-3'>
+					<div className='flex items-center gap-2'>
 						<Switch
 							id='show-completed'
 							checked={showCompleted}
 							onCheckedChange={setShowCompleted}
 						/>
-						<Label htmlFor='show-completed'>
-							Tamamlananları Göster
+						<Label htmlFor='show-completed' className='text-xs text-muted-foreground cursor-pointer'>
+							Tamamlananlar
 						</Label>
 					</div>
 					<CreateAnnualPlanDialog
@@ -241,8 +239,8 @@ export function AnnualPlansList({
 					{/* Active Section */}
 					{activePlans.length > 0 && (
 						<div className='space-y-4'>
-							<h3 className='text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2'>
-								<div className='h-1 w-1 rounded-full bg-green-500' />
+							<h3 className='text-xs font-medium text-muted-foreground/70 uppercase tracking-widest flex items-center gap-2'>
+								<div className='h-1.5 w-1.5 rounded-full bg-emerald-500' />
 								Devam Eden / Tamamlanan
 							</h3>
 							<div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
@@ -263,8 +261,8 @@ export function AnnualPlansList({
 
 					{/* Backlog Section (Draggable) */}
 					<div className='space-y-4'>
-						<h3 className='text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2'>
-							<div className='h-1 w-1 rounded-full bg-blue-500' />
+						<h3 className='text-xs font-medium text-muted-foreground/70 uppercase tracking-widest flex items-center gap-2'>
+							<div className='h-1.5 w-1.5 rounded-full bg-primary' />
 							Yapılacaklar
 						</h3>
 						<DndContext
@@ -303,32 +301,23 @@ export function AnnualPlansList({
 }
 
 function StatusBadge({ status }: { status: string }) {
-	const styles = {
-		Beklemede:
-			'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-		'Devam Ediyor':
-			'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-		Tamamlandı:
-			'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+	const styles: Record<string, string> = {
+		Beklemede: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+		'Devam Ediyor': 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+		Tamamlandı: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
 	};
 
-	const icons = {
+	const icons: Record<string, typeof Clock> = {
 		Beklemede: Clock,
 		'Devam Ediyor': AlertCircle,
 		Tamamlandı: CheckCircle2,
 	};
 
-	const Icon = icons[status as keyof typeof icons] || Clock;
-	const style =
-		styles[status as keyof typeof styles] || 'bg-gray-100 text-gray-700';
+	const Icon = icons[status] || Clock;
+	const style = styles[status] || 'bg-muted text-muted-foreground';
 
 	return (
-		<span
-			className={cn(
-				'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium',
-				style,
-			)}
-		>
+		<span className={cn('inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium', style)}>
 			<Icon className='h-3 w-3' />
 			{status}
 		</span>

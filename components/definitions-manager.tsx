@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Trash2, Plus, Loader2 } from 'lucide-react';
+import { Trash2, Plus, Loader2, FolderOpen, Building2, Users } from 'lucide-react';
 import { createProject, deleteProject, createUnit, deleteUnit, createPerson, deletePerson } from '@/app/actions/definitions';
 
 interface DefinitionsManagerProps {
@@ -19,13 +19,22 @@ interface DefinitionsManagerProps {
 export function DefinitionsManager({ projects, units, people }: DefinitionsManagerProps) {
     return (
         <Tabs defaultValue="projects" className="w-full space-y-6">
-            <TabsList>
-                <TabsTrigger value="projects">Uygulama/Projeler</TabsTrigger>
-                <TabsTrigger value="units">Birimler</TabsTrigger>
-                <TabsTrigger value="people">Kişiler</TabsTrigger>
+            <TabsList className="inline-flex h-10 gap-1 rounded-xl bg-muted/60 p-1 backdrop-blur-sm">
+                <TabsTrigger value="projects" className="gap-2 rounded-lg px-4 data-[state=active]:shadow-sm">
+                    <FolderOpen className="h-3.5 w-3.5" />
+                    Uygulama/Projeler
+                </TabsTrigger>
+                <TabsTrigger value="units" className="gap-2 rounded-lg px-4 data-[state=active]:shadow-sm">
+                    <Building2 className="h-3.5 w-3.5" />
+                    Birimler
+                </TabsTrigger>
+                <TabsTrigger value="people" className="gap-2 rounded-lg px-4 data-[state=active]:shadow-sm">
+                    <Users className="h-3.5 w-3.5" />
+                    Kişiler
+                </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="projects">
+            <TabsContent value="projects" className="animate-in">
                 <DefinitionList
                     title="Uygulama ve Projeler"
                     description="Sistemdeki proje ve uygulamaları yönetin."
@@ -36,7 +45,7 @@ export function DefinitionsManager({ projects, units, people }: DefinitionsManag
                 />
             </TabsContent>
 
-            <TabsContent value="units">
+            <TabsContent value="units" className="animate-in">
                 <DefinitionList
                     title="Birimler"
                     description="Talep eden veya çalışılan birimleri yönetin."
@@ -47,7 +56,7 @@ export function DefinitionsManager({ projects, units, people }: DefinitionsManag
                 />
             </TabsContent>
 
-            <TabsContent value="people">
+            <TabsContent value="people" className="animate-in">
                 <DefinitionList
                     title="Kişiler"
                     description="Sorumlu kişileri yönetin."
@@ -99,12 +108,12 @@ function DefinitionList({ title, description, items, onCreate, onDelete, placeho
     };
 
     return (
-        <Card>
+        <Card className="border-border/60">
             <CardHeader>
-                <CardTitle>{title}</CardTitle>
+                <CardTitle className="text-lg">{title}</CardTitle>
                 <CardDescription>{description}</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-5">
                 <form onSubmit={handleCreate} className="flex gap-2">
                     <div className="grid w-full items-center gap-1.5">
                         <Label htmlFor="name" className="sr-only">İsim</Label>
@@ -113,31 +122,32 @@ function DefinitionList({ title, description, items, onCreate, onDelete, placeho
                             value={newItemName}
                             onChange={(e) => setNewItemName(e.target.value)}
                             placeholder={placeholder}
+                            className="h-9"
                         />
                     </div>
-                    <Button type="submit" disabled={loading || !newItemName.trim()}>
+                    <Button type="submit" disabled={loading || !newItemName.trim()} size="sm" className="h-9 px-4">
                         {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
                         Ekle
                     </Button>
                 </form>
 
-                <div className="rounded-md border">
+                <div className="rounded-xl border border-border/60 overflow-hidden">
                     {items.length === 0 ? (
-                        <div className="p-4 text-center text-sm text-muted-foreground">
+                        <div className="p-8 text-center text-sm text-muted-foreground/70">
                             Kayıt bulunamadı.
                         </div>
                     ) : (
-                        <div className="divide-y">
+                        <div className="divide-y divide-border/50">
                             {items.map((item) => (
-                                <div key={item.id} className="flex items-center justify-between p-3 text-sm">
-                                    <span>{item.name}</span>
+                                <div key={item.id} className="flex items-center justify-between px-4 py-3 text-sm hover:bg-muted/30 transition-colors">
+                                    <span className="font-medium">{item.name}</span>
                                     <Button
                                         variant="ghost"
                                         size="icon-sm"
-                                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                                        className="h-7 w-7 text-muted-foreground/60 hover:text-destructive"
                                         onClick={() => handleDelete(item.id)}
                                     >
-                                        <Trash2 className="h-4 w-4" />
+                                        <Trash2 className="h-3.5 w-3.5" />
                                         <span className="sr-only">Sil</span>
                                     </Button>
                                 </div>

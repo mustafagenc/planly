@@ -101,22 +101,22 @@ export function AdHocTasksList({
 		<div className='space-y-6'>
 			<div className='flex items-center justify-between'>
 				<div>
-					<h2 className='text-2xl font-bold tracking-tight'>
+					<h2 className='text-xl font-semibold tracking-tight'>
 						Plan Harici İşler
 					</h2>
-					<p className='text-muted-foreground'>
-						Plansız ancak yapılan ek işlerin takibi.
+					<p className='text-sm text-muted-foreground mt-0.5'>
+						Plansız ancak yapılan ek işlerin takibi
 					</p>
 				</div>
-				<div className='flex items-center gap-4'>
-					<div className='flex items-center space-x-2'>
+				<div className='flex items-center gap-3'>
+					<div className='flex items-center gap-2'>
 						<Switch
 							id='show-completed-adhoc'
 							checked={showCompleted}
 							onCheckedChange={setShowCompleted}
 						/>
-						<Label htmlFor='show-completed-adhoc'>
-							Tamamlananları Göster
+						<Label htmlFor='show-completed-adhoc' className='text-xs text-muted-foreground cursor-pointer'>
+							Tamamlananlar
 						</Label>
 					</div>
 					<CreateAdHocTaskDialog
@@ -126,7 +126,7 @@ export function AdHocTasksList({
 				</div>
 			</div>
 
-			<div className='space-y-3'>
+			<div className='space-y-2'>
 				{visibleTasks.map((task, index) => (
 					<div
 						key={task.id}
@@ -136,13 +136,12 @@ export function AdHocTasksList({
 						onDrop={() => handleDrop(index)}
 						onDragEnd={handleDragEnd}
 						className={cn(
-							'flex items-stretch gap-2 transition-all',
-							dragOverIndex === index &&
-								'ring-2 ring-primary ring-offset-2 rounded-xl',
+							'group/drag flex items-stretch gap-1.5 transition-all duration-150',
+							dragOverIndex === index && 'ring-2 ring-primary/40 ring-offset-1 rounded-xl',
 						)}
 					>
-						<div className='cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground px-1 flex items-center shrink-0 rounded-lg hover:bg-muted'>
-							<GripVertical className='h-5 w-5' />
+						<div className='cursor-grab active:cursor-grabbing text-muted-foreground/40 hover:text-muted-foreground px-0.5 flex items-center shrink-0 rounded-lg transition-colors'>
+							<GripVertical className='h-4 w-4' />
 						</div>
 						<div className='flex-1 min-w-0'>
 							<TaskCard task={task} people={people} />
@@ -150,8 +149,8 @@ export function AdHocTasksList({
 					</div>
 				))}
 				{visibleTasks.length === 0 && (
-					<div className='py-12 text-center text-muted-foreground border rounded-xl border-dashed'>
-                    Henüz iş yok.
+					<div className='py-16 text-center text-sm text-muted-foreground/60 border border-dashed border-border/50 rounded-xl'>
+						Henüz iş yok
 					</div>
 				)}
 			</div>
@@ -167,25 +166,25 @@ function TaskCard({
 	people: Person[];
 }) {
 	return (
-		<Card className='group hover:shadow-md transition-shadow'>
-			<div className='flex flex-col md:flex-row md:items-center p-6 gap-4'>
-				<div className='flex-1 space-y-1'>
-					<div className='flex items-center gap-2'>
-						<span className='font-semibold text-base'>
+		<Card className='group hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden border-border/60'>
+			<div className='flex flex-col md:flex-row md:items-center p-5 gap-4'>
+				<div className='flex-1 space-y-1.5 min-w-0'>
+					<div className='flex items-center gap-2 flex-wrap'>
+						<span className='font-semibold text-sm tracking-tight'>
 							{task.project.name}
 						</span>
 						{task.ticketNo && (
-							<span className='text-xs bg-muted px-2 py-0.5 rounded-full text-muted-foreground font-mono'>
+							<span className='text-[11px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-mono font-medium'>
 								{task.ticketNo}
 							</span>
 						)}
 						<StatusBadge progress={task.progress} />
 					</div>
-					<p className='text-sm'>{task.description}</p>
-					<div className='flex items-center gap-4 mt-2'>
+					<p className='text-sm text-foreground/90 leading-relaxed'>{task.description}</p>
+					<div className='flex items-center gap-3 pt-1'>
 						{task.remarks && (
-							<p className='text-xs text-muted-foreground'>
-								Not: {task.remarks}
+							<p className='text-xs text-muted-foreground/70 italic'>
+								{task.remarks}
 							</p>
 						)}
 						<div className='flex items-center gap-1'>
@@ -196,9 +195,9 @@ function TaskCard({
 									<Button
 										variant='ghost'
 										size='sm'
-										className='h-6 w-6 p-0 text-muted-foreground hover:text-foreground'
+										className='h-7 w-7 p-0 text-muted-foreground hover:text-foreground'
 									>
-										<Pencil className='h-3 w-3' />
+										<Pencil className='h-3.5 w-3.5' />
 									</Button>
 								}
 							/>
@@ -209,10 +208,9 @@ function TaskCard({
 									<Button
 										variant='ghost'
 										size='sm'
-										className='h-6 text-xs px-2'
+										className='h-7 text-xs px-2 text-muted-foreground hover:text-foreground'
 									>
-										<Clock className='mr-1 h-3 w-3' /> Efor
-										Gir
+										<Clock className='mr-1 h-3 w-3' /> Efor Gir
 									</Button>
 								}
 							/>
@@ -220,43 +218,45 @@ function TaskCard({
 					</div>
 				</div>
 
-				<div className='flex items-center gap-6 text-sm text-muted-foreground min-w-[200px] justify-end'>
+				<div className='flex items-center gap-5 text-sm text-muted-foreground shrink-0'>
 					{task.coResponsible && (
 						<div className='flex flex-col items-end'>
-							<span className='text-[10px] uppercase font-semibold'>
-								Ortak Çalışma
+							<span className='text-[10px] uppercase tracking-wider font-medium text-muted-foreground/60'>
+								Ortak
 							</span>
-							<span className='text-foreground'>
+							<span className='text-foreground/90 text-sm'>
 								{task.coResponsible}
 							</span>
 						</div>
 					)}
 					<div className='flex flex-col items-end'>
-						<span className='text-[10px] uppercase font-semibold'>
+						<span className='text-[10px] uppercase tracking-wider font-medium text-muted-foreground/60'>
 							Sorumlu
 						</span>
-						<span className='text-foreground'>
+						<span className='text-foreground/90 text-sm'>
 							{task.responsible?.name || '-'}
 						</span>
 					</div>
-					<div className='flex flex-col items-end min-w-[60px]'>
-						<span className='text-[10px] uppercase font-semibold'>
+					<div className='flex flex-col items-end'>
+						<span className='text-[10px] uppercase tracking-wider font-medium text-muted-foreground/60'>
 							Efor
 						</span>
-						<span className='text-foreground'>
+						<span className='text-foreground font-semibold text-sm'>
 							{task.daysSpent || 0} gün
 						</span>
 					</div>
 				</div>
 			</div>
 
-			<div className='h-1 w-full bg-secondary overflow-hidden rounded-b-xl'>
+			<div className='h-1 w-full bg-secondary'>
 				<div
 					className={cn(
 						'h-full transition-all duration-500',
-						task.progress === 100 ? 'bg-green-500' : 'bg-blue-500',
+						task.progress === 100
+							? 'bg-linear-to-r from-emerald-500 to-emerald-400'
+							: 'bg-linear-to-r from-primary to-primary/70',
 					)}
-					style={{ width: `${task.progress}%` }}
+					style={{ width: `${Math.max(task.progress, 2)}%` }}
 				/>
 			</div>
 		</Card>
@@ -265,30 +265,23 @@ function TaskCard({
 
 function StatusBadge({ progress }: { progress: number }) {
 	let status = 'Devam Ediyor';
-	let style =
-		'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+	let style = 'bg-blue-500/10 text-blue-600 dark:text-blue-400';
 	let Icon = AlertCircle;
 
 	if (progress === 0) {
 		status = 'Başlamadı';
-		style = 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
+		style = 'bg-muted text-muted-foreground';
 		Icon = Clock;
 	} else if (progress === 100) {
 		status = 'Tamamlandı';
-		style =
-			'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
+		style = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
 		Icon = CheckCircle2;
 	}
 
 	return (
-		<span
-			className={cn(
-				'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ml-2',
-				style,
-			)}
-		>
+		<span className={cn('inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium', style)}>
 			<Icon className='h-3 w-3' />
-			{status} ({progress}%)
+			{status}
 		</span>
 	);
 }

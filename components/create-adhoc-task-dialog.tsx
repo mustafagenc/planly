@@ -78,13 +78,13 @@ export function CreateAdHocTaskDialog({ projects, people }: CreateAdHocTaskDialo
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button>
-                    <Plus className="mr-2 h-4 w-4" /> Yeni İş Ekle
+                <Button size="sm" className="gap-1.5">
+                    <Plus className="h-4 w-4" /> Yeni İş Ekle
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
-                    <DialogTitle>Yeni Plan Harici İş Ekle</DialogTitle>
+                    <DialogTitle className="text-lg">Yeni Plan Harici İş</DialogTitle>
                     <DialogDescription>
                         Plansız yapılan bir işi kayıtlara ekleyin.
                     </DialogDescription>
