@@ -14,9 +14,15 @@ export default async function ProtectedLayout({
 		redirect('/login');
 	}
 
+	const user = {
+		name: session.user?.name,
+		email: session.user?.email,
+		role: (session.user as { role?: string })?.role,
+	};
+
 	return (
 		<div className='min-h-screen bg-background bg-dots flex flex-col'>
-			<Header />
+			<Header user={user} />
 			<main className='flex-1 px-6 py-8 lg:px-8'>
 				<div className='max-w-7xl mx-auto'>{children}</div>
 			</main>
