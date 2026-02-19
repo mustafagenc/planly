@@ -3,9 +3,8 @@ import { Geist, Geist_Mono, Noto_Sans } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import '@/styles/globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
-import { Footer } from '@/components/footer';
+import { SessionProvider } from '@/components/session-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { Header } from '@/components/header';
 
 const notoSans = Noto_Sans({ variable: '--font-sans' });
 
@@ -34,25 +33,19 @@ export default function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
 			>
-				<ThemeProvider
-					attribute='class'
-					defaultTheme='system'
-					enableSystem
-					disableTransitionOnChange
-				>
-					<TooltipProvider>
-						<div className='min-h-screen bg-background bg-dots flex flex-col'>
-							<Header />
-							<main className='flex-1 px-6 py-8 lg:px-8'>
-								<div className='max-w-7xl mx-auto'>
-									{children}
-								</div>
-							</main>
-							<Footer />
-						</div>
-					</TooltipProvider>
-					<Analytics />
-				</ThemeProvider>
+				<SessionProvider>
+					<ThemeProvider
+						attribute='class'
+						defaultTheme='system'
+						enableSystem
+						disableTransitionOnChange
+					>
+						<TooltipProvider>
+							{children}
+						</TooltipProvider>
+						<Analytics />
+					</ThemeProvider>
+				</SessionProvider>
 			</body>
 		</html>
 	);

@@ -1,5 +1,6 @@
 import { PlanlyLogo } from './planly-logo';
 import { Navigation } from './navigation';
+import { UserMenu } from './user-menu';
 
 export function Header() {
 	return (
@@ -7,7 +8,10 @@ export function Header() {
 			<div className='max-w-7xl mx-auto'>
 				<div className='flex items-center justify-between h-16'>
 					<PlanlyLogo size={120} />
-					<Navigation />
+					<div className='flex items-center gap-4'>
+						<Navigation />
+						<UserMenu />
+					</div>
 				</div>
 			</div>
 		</header>

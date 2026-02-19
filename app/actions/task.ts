@@ -3,6 +3,7 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { type TaskType, type TaskStatus, type Prisma } from '@/prisma/generated/client';
+import { getCurrentUserId } from '@/lib/auth-utils';
 
 export async function getTasks(filters?: {
     type?: TaskType;
@@ -10,7 +11,8 @@ export async function getTasks(filters?: {
     projectId?: number;
     year?: number;
 }) {
-    const where: Prisma.TaskWhereInput = {};
+    const userId = await getCurrentUserId();
+    const where: Prisma.TaskWhereInput = { userId };
 
     if (filters?.type) where.type = filters.type;
     if (filters?.status) where.status = filters.status;
@@ -29,7 +31,9 @@ export async function getTasks(filters?: {
 }
 
 export async function getTasksByStatus() {
+    const userId = await getCurrentUserId();
     const tasks = await prisma.task.findMany({
+        where: { userId },
         include: {
             project: true,
             unit: true,
@@ -59,9 +63,11 @@ export async function createTask(data: {
     estimatedDays?: number;
     remarks?: string;
 }) {
+    const userId = await getCurrentUserId();
     const task = await prisma.task.create({
         data: {
             ...data,
+            userId,
             status: 'BACKLOG',
             progress: 0,
             daysSpent: 0,
@@ -89,8 +95,9 @@ export async function updateTask(
         remarks: string;
     }>
 ) {
+    const userId = await getCurrentUserId();
     const task = await prisma.task.update({
-        where: { id },
+        where: { id, userId },
         data,
     });
     revalidatePath('/');
@@ -98,6 +105,7 @@ export async function updateTask(
 }
 
 export async function updateTaskStatus(id: number, status: TaskStatus) {
+    const userId = await getCurrentUserId();
     const progressMap: Record<TaskStatus, number | undefined> = {
         BACKLOG: 0,
         TODO: undefined,
@@ -108,7 +116,7 @@ export async function updateTaskStatus(id: number, status: TaskStatus) {
     const progress = progressMap[status];
 
     const task = await prisma.task.update({
-        where: { id },
+        where: { id, userId },
         data: {
             status,
             ...(progress !== undefined && { progress }),
@@ -119,15 +127,17 @@ export async function updateTaskStatus(id: number, status: TaskStatus) {
 }
 
 export async function deleteTask(id: number) {
-    await prisma.task.delete({ where: { id } });
+    const userId = await getCurrentUserId();
+    await prisma.task.delete({ where: { id, userId } });
     revalidatePath('/');
 }
 
 export async function reorderTasks(items: { id: number; order: number }[]) {
+    const userId = await getCurrentUserId();
     try {
         const transactions = items.map((item) =>
             prisma.task.update({
-                where: { id: item.id },
+                where: { id: item.id, userId },
                 data: { order: item.order },
             })
         );

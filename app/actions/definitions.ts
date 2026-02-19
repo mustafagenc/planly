@@ -2,14 +2,18 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { getCurrentUserId } from '@/lib/auth-utils';
 
+// Projects
 export async function getProjects() {
-  return await prisma.project.findMany({ orderBy: { name: 'asc' } });
+  const userId = await getCurrentUserId();
+  return await prisma.project.findMany({ where: { userId }, orderBy: { name: 'asc' } });
 }
 
 export async function createProject(name: string) {
   try {
-    const project = await prisma.project.create({ data: { name } });
+    const userId = await getCurrentUserId();
+    const project = await prisma.project.create({ data: { name, userId } });
     revalidatePath('/');
     return { success: true, data: project };
   } catch (error) {
@@ -20,7 +24,8 @@ export async function createProject(name: string) {
 
 export async function updateProject(id: number, name: string) {
   try {
-    const project = await prisma.project.update({ where: { id }, data: { name } });
+    const userId = await getCurrentUserId();
+    const project = await prisma.project.update({ where: { id, userId }, data: { name } });
     revalidatePath('/');
     return { success: true, data: project };
   } catch (error) {
@@ -31,7 +36,8 @@ export async function updateProject(id: number, name: string) {
 
 export async function deleteProject(id: number) {
   try {
-    await prisma.project.delete({ where: { id } });
+    const userId = await getCurrentUserId();
+    await prisma.project.delete({ where: { id, userId } });
     revalidatePath('/');
     return { success: true };
   } catch (error) {
@@ -42,12 +48,14 @@ export async function deleteProject(id: number) {
 
 // Units
 export async function getUnits() {
-  return await prisma.unit.findMany({ orderBy: { name: 'asc' } });
+  const userId = await getCurrentUserId();
+  return await prisma.unit.findMany({ where: { userId }, orderBy: { name: 'asc' } });
 }
 
 export async function createUnit(name: string) {
   try {
-    const unit = await prisma.unit.create({ data: { name } });
+    const userId = await getCurrentUserId();
+    const unit = await prisma.unit.create({ data: { name, userId } });
     revalidatePath('/');
     return { success: true, data: unit };
   } catch (error) {
@@ -58,7 +66,8 @@ export async function createUnit(name: string) {
 
 export async function updateUnit(id: number, name: string) {
   try {
-    const unit = await prisma.unit.update({ where: { id }, data: { name } });
+    const userId = await getCurrentUserId();
+    const unit = await prisma.unit.update({ where: { id, userId }, data: { name } });
     revalidatePath('/');
     return { success: true, data: unit };
   } catch (error) {
@@ -69,7 +78,8 @@ export async function updateUnit(id: number, name: string) {
 
 export async function deleteUnit(id: number) {
   try {
-    await prisma.unit.delete({ where: { id } });
+    const userId = await getCurrentUserId();
+    await prisma.unit.delete({ where: { id, userId } });
     revalidatePath('/');
     return { success: true };
   } catch (error) {
@@ -80,12 +90,14 @@ export async function deleteUnit(id: number) {
 
 // People
 export async function getPeople() {
-  return await prisma.person.findMany({ orderBy: { name: 'asc' } });
+  const userId = await getCurrentUserId();
+  return await prisma.person.findMany({ where: { userId }, orderBy: { name: 'asc' } });
 }
 
 export async function createPerson(name: string) {
   try {
-    const person = await prisma.person.create({ data: { name } });
+    const userId = await getCurrentUserId();
+    const person = await prisma.person.create({ data: { name, userId } });
     revalidatePath('/');
     return { success: true, data: person };
   } catch (error) {
@@ -96,7 +108,8 @@ export async function createPerson(name: string) {
 
 export async function updatePerson(id: number, name: string) {
   try {
-    const person = await prisma.person.update({ where: { id }, data: { name } });
+    const userId = await getCurrentUserId();
+    const person = await prisma.person.update({ where: { id, userId }, data: { name } });
     revalidatePath('/');
     return { success: true, data: person };
   } catch (error) {
@@ -107,7 +120,8 @@ export async function updatePerson(id: number, name: string) {
 
 export async function deletePerson(id: number) {
   try {
-    await prisma.person.delete({ where: { id } });
+    const userId = await getCurrentUserId();
+    await prisma.person.delete({ where: { id, userId } });
     revalidatePath('/');
     return { success: true };
   } catch (error) {

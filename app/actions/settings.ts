@@ -3,13 +3,16 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { type SettingType } from '@/prisma/generated/client';
+import { getCurrentUserId } from '@/lib/auth-utils';
 
 export async function getSettings() {
-    return await prisma.setting.findMany({ orderBy: { key: 'asc' } });
+    const userId = await getCurrentUserId();
+    return await prisma.setting.findMany({ where: { userId }, orderBy: { key: 'asc' } });
 }
 
 export async function getSetting(key: string) {
-    return await prisma.setting.findUnique({ where: { key } });
+    const userId = await getCurrentUserId();
+    return await prisma.setting.findFirst({ where: { key, userId } });
 }
 
 export async function createSetting(data: {
@@ -20,7 +23,8 @@ export async function createSetting(data: {
     description?: string;
 }) {
     try {
-        const setting = await prisma.setting.create({ data });
+        const userId = await getCurrentUserId();
+        const setting = await prisma.setting.create({ data: { ...data, userId } });
         revalidatePath('/');
         return { success: true, data: setting };
     } catch (error) {
@@ -35,7 +39,8 @@ export async function updateSetting(id: number, data: {
     description?: string;
 }) {
     try {
-        const setting = await prisma.setting.update({ where: { id }, data });
+        const userId = await getCurrentUserId();
+        const setting = await prisma.setting.update({ where: { id, userId }, data });
         revalidatePath('/');
         return { success: true, data: setting };
     } catch (error) {
@@ -46,7 +51,8 @@ export async function updateSetting(id: number, data: {
 
 export async function deleteSetting(id: number) {
     try {
-        await prisma.setting.delete({ where: { id } });
+        const userId = await getCurrentUserId();
+        await prisma.setting.delete({ where: { id, userId } });
         revalidatePath('/');
         return { success: true };
     } catch (error) {

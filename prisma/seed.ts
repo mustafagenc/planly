@@ -33,7 +33,7 @@ function parseProgress(progressRaw: any): number {
 	return 0;
 }
 
-async function processAnnualPlanSheet(data: any[]) {
+async function processAnnualPlanSheet(data: any[], userId: string) {
 	console.log(`Processing Annual Plan Items (${data.length} rows)...`);
 
 	for (const row of data) {
@@ -49,23 +49,23 @@ async function processAnnualPlanSheet(data: any[]) {
 		const progressRaw = row['İlerleme'];
 
 		const project = await prisma.project.upsert({
-			where: { name: String(applicationName).trim() },
+			where: { name_userId: { name: String(applicationName).trim(), userId } },
 			update: {},
-			create: { name: String(applicationName).trim() },
+			create: { name: String(applicationName).trim(), userId },
 		});
 
 		const unit = await prisma.unit.upsert({
-			where: { name: String(unitName).trim() },
+			where: { name_userId: { name: String(unitName).trim(), userId } },
 			update: {},
-			create: { name: String(unitName).trim() },
+			create: { name: String(unitName).trim(), userId },
 		});
 
 		let person = null;
 		if (personName) {
 			person = await prisma.person.upsert({
-				where: { name: String(personName).trim() },
+				where: { name_userId: { name: String(personName).trim(), userId } },
 				update: {},
-				create: { name: String(personName).trim() },
+				create: { name: String(personName).trim(), userId },
 			});
 		}
 
@@ -74,6 +74,7 @@ async function processAnnualPlanSheet(data: any[]) {
 
 		const existing = await prisma.task.findFirst({
 			where: {
+				userId,
 				projectId: project.id,
 				title: String(taskSummary).trim(),
 				type: 'ANNUAL_PLAN',
@@ -85,6 +86,7 @@ async function processAnnualPlanSheet(data: any[]) {
 				data: {
 					type: 'ANNUAL_PLAN',
 					status,
+					userId,
 					projectId: project.id,
 					unitId: unit.id,
 					responsibleId: person?.id,
@@ -113,7 +115,7 @@ async function processAnnualPlanSheet(data: any[]) {
 	}
 }
 
-async function processAdHocSheet(data: any[]) {
+async function processAdHocSheet(data: any[], userId: string) {
 	console.log(`Processing Ad-Hoc Items (${data.length} rows)...`);
 
 	for (const row of data) {
@@ -130,17 +132,17 @@ async function processAdHocSheet(data: any[]) {
 		const monthRaw = row['Ay'];
 
 		const project = await prisma.project.upsert({
-			where: { name: String(applicationName).trim() },
+			where: { name_userId: { name: String(applicationName).trim(), userId } },
 			update: {},
-			create: { name: String(applicationName).trim() },
+			create: { name: String(applicationName).trim(), userId },
 		});
 
 		let person = null;
 		if (personName) {
 			person = await prisma.person.upsert({
-				where: { name: String(personName).trim() },
+				where: { name_userId: { name: String(personName).trim(), userId } },
 				update: {},
-				create: { name: String(personName).trim() },
+				create: { name: String(personName).trim(), userId },
 			});
 		}
 
@@ -158,6 +160,7 @@ async function processAdHocSheet(data: any[]) {
 
 		let task = await prisma.task.findFirst({
 			where: {
+				userId,
 				projectId: project.id,
 				title: String(description).trim(),
 				type: 'ADHOC',
@@ -169,6 +172,7 @@ async function processAdHocSheet(data: any[]) {
 				data: {
 					type: 'ADHOC',
 					status,
+					userId,
 					projectId: project.id,
 					responsibleId: person?.id,
 					title: String(description).trim(),
@@ -211,12 +215,13 @@ async function processAdHocSheet(data: any[]) {
 					0,
 				);
 				const existingLog = await prisma.workLog.findFirst({
-					where: { taskId: task.id, date: workDate },
+					where: { userId, taskId: task.id, date: workDate },
 				});
 
 				if (!existingLog) {
 					await prisma.workLog.create({
 						data: {
+							userId,
 							taskId: task.id,
 							date: workDate,
 							daysWorked: daysSpent,
@@ -240,7 +245,32 @@ async function processAdHocSheet(data: any[]) {
 	}
 }
 
+async function seedAdminUser() {
+	const bcrypt = await import('bcryptjs');
+	const email = 'eposta@mustafagenc.info';
+
+	const existing = await prisma.user.findUnique({ where: { email } });
+	if (existing) {
+		console.log('Admin user already exists, skipping...');
+		return existing;
+	}
+
+	const hashedPassword = await bcrypt.hash('admin123', 12);
+	const admin = await prisma.user.create({
+		data: {
+			name: 'Mustafa Genç',
+			email,
+			password: hashedPassword,
+			role: 'ADMIN',
+		},
+	});
+	console.log(`Admin user created: ${admin.email}`);
+	return admin;
+}
+
 async function main() {
+	const admin = await seedAdminUser();
+
 	const filePath = path.join(process.cwd(), '.notes/2026.xlsx');
 	if (!fs.existsSync(filePath)) {
 		console.error('File not found:', filePath);
@@ -253,14 +283,14 @@ async function main() {
 		const data = XLSX.utils.sheet_to_json(
 			workbook.Sheets[workbook.SheetNames[0]],
 		);
-		await processAnnualPlanSheet(data);
+		await processAnnualPlanSheet(data, admin.id);
 	}
 
 	if (workbook.SheetNames.length > 1) {
 		const data = XLSX.utils.sheet_to_json(
 			workbook.Sheets[workbook.SheetNames[1]],
 		);
-		await processAdHocSheet(data);
+		await processAdHocSheet(data, admin.id);
 	}
 }
 

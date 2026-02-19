@@ -3,9 +3,11 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { type Prisma } from '@/prisma/generated/client';
+import { getCurrentUserId } from '@/lib/auth-utils';
 
 export async function getWorkLogs(month?: number, year?: number) {
-    const where: Prisma.WorkLogWhereInput = {};
+    const userId = await getCurrentUserId();
+    const where: Prisma.WorkLogWhereInput = { userId };
 
     if (month && year) {
         const startDate = new Date(year, month - 1, 1);
@@ -46,11 +48,12 @@ const MONTH_LABELS = [
 ];
 
 export async function getYearlyWorkStats(year: number): Promise<YearlyStats> {
+    const userId = await getCurrentUserId();
     const startDate = new Date(year, 0, 1);
     const endDate = new Date(year, 11, 31, 23, 59, 59);
 
     const logs = await prisma.workLog.findMany({
-        where: { date: { gte: startDate, lte: endDate } },
+        where: { userId, date: { gte: startDate, lte: endDate } },
         include: { task: { select: { type: true } } },
     });
 
@@ -90,7 +93,8 @@ export async function createWorkLog(data: {
     description?: string;
     taskId: number;
 }) {
-    const log = await prisma.workLog.create({ data });
+    const userId = await getCurrentUserId();
+    const log = await prisma.workLog.create({ data: { ...data, userId } });
 
     await prisma.task.update({
         where: { id: data.taskId },
@@ -109,11 +113,12 @@ export async function createWorkLogBatch(entries: {
 }[]) {
     if (entries.length === 0) return [];
 
+    const userId = await getCurrentUserId();
     const taskId = entries[0].taskId;
     const totalDays = entries.reduce((sum, e) => sum + e.daysWorked, 0);
 
     const logs = await prisma.$transaction(
-        entries.map((entry) => prisma.workLog.create({ data: entry }))
+        entries.map((entry) => prisma.workLog.create({ data: { ...entry, userId } }))
     );
 
     await prisma.task.update({
@@ -133,8 +138,9 @@ export async function updateWorkLog(
         description: string;
     }>
 ) {
+    const userId = await getCurrentUserId();
     const log = await prisma.workLog.update({
-        where: { id },
+        where: { id, userId },
         data,
     });
     revalidatePath('/');
@@ -142,13 +148,14 @@ export async function updateWorkLog(
 }
 
 export async function deleteWorkLog(id: number) {
-    const log = await prisma.workLog.findUnique({ where: { id } });
+    const userId = await getCurrentUserId();
+    const log = await prisma.workLog.findUnique({ where: { id, userId } });
     if (log) {
         await prisma.task.update({
             where: { id: log.taskId },
             data: { daysSpent: { decrement: log.daysWorked } },
         });
     }
-    await prisma.workLog.delete({ where: { id } });
+    await prisma.workLog.delete({ where: { id, userId } });
     revalidatePath('/');
 }
