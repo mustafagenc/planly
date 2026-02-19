@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono, Noto_Sans } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import '@/styles/globals.css';
@@ -18,9 +18,34 @@ const geistMono = Geist_Mono({
 	subsets: ['latin'],
 });
 
+const APP_NAME = 'Planly';
+const APP_DESCRIPTION = 'Kişisel iş planlama ve takip uygulaması';
+
+export const viewport: Viewport = {
+	themeColor: '#09090b',
+};
+
 export const metadata: Metadata = {
-	title: 'Planly',
-	description: 'İş Planlama & Takip',
+	applicationName: APP_NAME,
+	title: {
+		default: APP_NAME,
+		template: `%s — ${APP_NAME}`,
+	},
+	description: APP_DESCRIPTION,
+	appleWebApp: {
+		capable: true,
+		statusBarStyle: 'default',
+		title: APP_NAME,
+	},
+	formatDetection: {
+		telephone: false,
+	},
+	openGraph: {
+		type: 'website',
+		siteName: APP_NAME,
+		title: APP_NAME,
+		description: APP_DESCRIPTION,
+	},
 };
 
 export default function RootLayout({
