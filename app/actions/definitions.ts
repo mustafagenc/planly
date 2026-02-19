@@ -18,6 +18,17 @@ export async function createProject(name: string) {
   }
 }
 
+export async function updateProject(id: number, name: string) {
+  try {
+    const project = await prisma.project.update({ where: { id }, data: { name } });
+    revalidatePath('/');
+    return { success: true, data: project };
+  } catch (error) {
+    console.error('Failed to update project:', error);
+    return { success: false, error: 'Proje güncellenirken bir hata oluştu.' };
+  }
+}
+
 export async function deleteProject(id: number) {
   try {
     await prisma.project.delete({ where: { id } });
@@ -45,6 +56,17 @@ export async function createUnit(name: string) {
   }
 }
 
+export async function updateUnit(id: number, name: string) {
+  try {
+    const unit = await prisma.unit.update({ where: { id }, data: { name } });
+    revalidatePath('/');
+    return { success: true, data: unit };
+  } catch (error) {
+    console.error('Failed to update unit:', error);
+    return { success: false, error: 'Birim güncellenirken bir hata oluştu.' };
+  }
+}
+
 export async function deleteUnit(id: number) {
   try {
     await prisma.unit.delete({ where: { id } });
@@ -69,6 +91,17 @@ export async function createPerson(name: string) {
   } catch (error) {
     console.error('Failed to create person:', error);
     return { success: false, error: 'Kişi oluşturulurken bir hata oluştu.' };
+  }
+}
+
+export async function updatePerson(id: number, name: string) {
+  try {
+    const person = await prisma.person.update({ where: { id }, data: { name } });
+    revalidatePath('/');
+    return { success: true, data: person };
+  } catch (error) {
+    console.error('Failed to update person:', error);
+    return { success: false, error: 'Kişi güncellenirken bir hata oluştu.' };
   }
 }
 
