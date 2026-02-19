@@ -7,3 +7,89 @@ datasource db {
   provider = "postgresql"
 }
 
+model Project {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  plans       AnnualPlan[]
+  adHocTasks  AdHocTask[]
+}
+
+model Unit {
+  id             Int          @id @default(autoincrement())
+  name           String       @unique
+  requestedPlans AnnualPlan[]
+}
+
+model Person {
+  id            Int          @id @default(autoincrement())
+  name          String       @unique
+  assignedPlans AnnualPlan[]
+  assignedTasks AdHocTask[]
+}
+
+model AnnualPlan {
+  id            Int      @id @default(autoincrement())
+  year          Int      @default(2025)
+  
+  projectId     Int
+  project       Project  @relation(fields: [projectId], references: [id])
+  
+  unitId        Int?
+  unit          Unit?    @relation(fields: [unitId], references: [id])
+  
+  taskSummary   String
+  detail        String?
+  status        String   @default("Beklemede")
+  
+  responsibleId Int?
+  responsible   Person?  @relation(fields: [responsibleId], references: [id])
+  
+  estimatedDays Float?
+  progress      Int      @default(0)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  workLogs      WorkLog[]
+}
+
+model AdHocTask {
+  id             Int      @id @default(autoincrement())
+  
+  projectId      Int
+  project        Project  @relation(fields: [projectId], references: [id])
+  
+  coResponsible  String?
+  
+  description    String
+  remarks        String?
+  ticketNo       String?
+  
+  responsibleId  Int?
+  responsible    Person?  @relation(fields: [responsibleId], references: [id])
+  
+  daysSpent      Float?
+  progress       Int      @default(0)
+  previousStatus String?
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  workLogs       WorkLog[]
+}
+
+model WorkLog {
+  id           Int      @id @default(autoincrement())
+  date         DateTime
+  daysWorked   Float
+  description  String?
+  
+  annualPlanId Int?
+  annualPlan   AnnualPlan? @relation(fields: [annualPlanId], references: [id])
+  
+  adHocTaskId  Int?
+  adHocTask    AdHocTask? @relation(fields: [adHocTaskId], references: [id])
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
