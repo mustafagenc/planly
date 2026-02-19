@@ -1,0 +1,26 @@
+{
+  "servers": {
+    "Vercel": {
+      "url": "https://mcp.vercel.com",
+      "type": "http"
+    },
+    "next-devtools": {
+      "command": "npx",
+      "args": ["-y", "next-devtools-mcp@latest"],
+      "type": "stdio"
+    },
+    "tailwindcss-server": {
+      "command": "npx",
+      "args": ["-y", "tailwindcss-mcp-server"],
+      "type": "stdio"
+    },
+    "Prisma-Remote": {
+      "url": "https://mcp.prisma.io/mcp"
+    },
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    }
+  },
+  "inputs": []
+}

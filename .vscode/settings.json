@@ -1,4 +1,87 @@
 {
-  "WillLuke.nextjs.addTypesOnSave": true,
-  "WillLuke.nextjs.hasPrompted": true
+  // Editor Settings
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.rulers": [120],
+  "doppler.autocomplete.enable": true,
+  "doppler.hover.enable": true,
+  // Copilot Settings
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": true,
+    "plaintext": false,
+    "markdown": true
+  },
+  // Continue.dev Settings (if using Continue extension)
+  "continue.contextProviders": [
+    {
+      "name": "codebase",
+      "params": {}
+    },
+    {
+      "name": "file",
+      "params": {
+        "files": [".docs/.ai-coding-prompt.md"]
+      }
+    }
+  ],
+  // Files to include in AI context
+  "files.associations": {
+    ".ai-coding-prompt.md": "markdown"
+  },
+  // TypeScript Settings
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  // ESLint Settings
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.workingDirectories": [
+    "./apps/website",
+    "./apps/docs",
+    "./packages/core",
+    "./packages/components",
+    "./packages/database"
+  ],
+  // Prettier Settings
+  "prettier.requireConfig": true,
+  // File Nesting
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.automaticExpansion": false,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.js",
+    "*.tsx": "${capture}.ts",
+    ".eslintrc.json": ".eslintignore",
+    ".prettierrc.json": ".prettierignore",
+    "tsconfig.json": "tsconfig.*.json, tsconfig.tsbuildinfo",
+    ".gitattributes": ".gitignore",
+    "README.md": "SECURITY.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, CHANGELOG.md, LICENSE",
+    "vitest.config.ts": "vitest.setup.ts",
+    ".env": ".env.example, .env.local, .env.json",
+    "instrumentation.ts": "instrumentation.node.ts",
+    "vercel.json": ".vercelignore",
+    "next.config.ts": "next-env.d.ts",
+    ".prettierrc": ".prettierignore"
+  },
+  // Git Settings
+  "git.enableCommitSigning": true,
+  // Search Settings
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/build": true,
+    "pnpm-lock.yaml": true
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
