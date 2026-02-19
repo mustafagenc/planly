@@ -18,7 +18,7 @@ const commitlintConfig = {
 				'revert', // Revert previous commit
 			],
 		],
-		'scope-enum': [2, 'always', ['app', 'scripts', 'auth']],
+		'scope-enum': [2, 'always', ['app', 'scripts', 'auth', 'config']],
 		'subject-case': [2, 'always', 'sentence-case'],
 		'body-max-line-length': [2, 'always', 180],
 	},
