@@ -6,6 +6,8 @@ jobs:
   test:
     name: Run Tests and Collect Coverage
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: 'postgresql://dummy:dummy@localhost:5432/dummy'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -20,17 +22,15 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@mustafagenc'
 
-      - name: Install dependencies with pnpm
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build packages
-        run: pnpm build
+      - name: Generate Prisma Client
+        run: pnpm db:generate
 
-      - name: Run tests with pnpm
-        run: pnpm test:run --coverage
+      - name: Run tests
+        run: pnpm test:coverage
 
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
