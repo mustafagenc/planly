@@ -1,7 +1,18 @@
 {
   "name": "planly",
+  "description": "Planly is a personal project to manage my tasks and projects.",
+  "author": "Mustafa Genç",
+  "license": "Apache-2.0",
+  "homepage": "https://planly.mustafagenc.info",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mustafagenc/planly.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mustafagenc/planly/issues"
+  },
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,6 +20,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.6.1",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
@@ -22,5 +34,6 @@
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "pnpm@10.30.0+sha512.2b5753de015d480eeb88f5b5b61e0051f05b4301808a82ec8b840c9d2adf7748eb352c83f5c1593ca703ff1017295bc3fdd3119abb9686efc96b9fcb18200937"
 }
